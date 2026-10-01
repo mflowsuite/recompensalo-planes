@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap">
 <style>
-  /* Marca MflowSuite en claro (pedido de Martín: en oscuro no llegaba a leer): una hoja de trabajo para salir a vender.
+  /* Marca MflowSuite en claro por defecto (en oscuro Martín no llegaba a leer), con «Modo noche» a elección: una hoja de trabajo para salir a vender.
      Arriba la cuenta (calculadora), abajo el mercado (rubros por familia). */
   :root {
     --bg: #F1F5F9; --card: #FFFFFF; --card2: #F8FAFC; --line: #E2E8F0; --line2: #CBD5E1;
@@ -20,7 +20,15 @@
     --green: #15803D; --blue: #1D4ED8; --orange: #B45309; --red: #B91C1C;
     --code: "Fira Code", ui-monospace, "Cascadia Mono", Consolas, monospace;
     --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --pw-text: rgba(15,23,42,.62); --pw-dim: rgba(15,23,42,.42); --sombra: rgba(15,23,42,.10);
     color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #020617; --card: #0F172A; --card2: #1E293B; --line: #1E293B; --line2: #334155;
+    --text: #F8FAFC; --muted: #94A3B8; --dim: #64748B;
+    --green: #22C55E; --blue: #60A5FA; --orange: #FBBF24; --red: #F87171;
+    --pw-text: rgba(255,255,255,.55); --pw-dim: rgba(255,255,255,.3); --sombra: rgba(0,0,0,.35);
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font: 400 15px/1.6 var(--sans); }
@@ -99,7 +107,7 @@
   .indice a:hover { border-color: var(--green); color: var(--green); }
   .planes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
   .plan { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
-  .plan.reco { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 12px 24px rgba(15,23,42,.10); }
+  .plan.reco { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 12px 24px var(--sombra); }
   .plan .nom { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .plan .nom h3 { font-size: 18px; }
   .precio { display: grid; gap: 2px; }
@@ -169,11 +177,20 @@
   .servidores b { color: var(--green); }
   .servidores .aviso { color: var(--orange); }
 
+  .arriba { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .tema { display: inline-flex; align-items: center; gap: 8px; background: var(--card); color: var(--text); border: 1px solid var(--line2);
+    border-radius: 20px; padding: 7px 14px; font: 600 13px/1 var(--sans); cursor: pointer; transition: border-color 150ms ease, color 150ms ease; }
+  .tema:hover { border-color: var(--green); color: var(--green); }
+  .tema:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .tema .sol { display: none; }
+  :root[data-theme="dark"] .tema .sol { display: inline; }
+  :root[data-theme="dark"] .tema .luna { display: none; }
+
   /* Pie */
   footer.pie { display: grid; gap: 6px; justify-items: center; text-align: center; color: var(--dim); font-size: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
   #hl-pw-scene { position: relative; display: inline-block; margin-top: .75rem; }
-  #hl-pw-row { display: inline-flex; align-items: center; font-family: var(--sans); font-size: 11px; font-weight: 600; white-space: nowrap; color: rgba(15,23,42,.62); }
-  .hl-pw-by { color: rgba(15,23,42,.42); }
+  #hl-pw-row { display: inline-flex; align-items: center; font-family: var(--sans); font-size: 11px; font-weight: 600; white-space: nowrap; color: var(--pw-text); }
+  .hl-pw-by { color: var(--pw-dim); }
   #hl-pw-slot { display: inline-block; width: 28px; height: 28px; margin: 0 5px; vertical-align: middle; flex-shrink: 0; }
   #hl-pw-logo { position: absolute; top: 0; left: 0; width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none; }
   #hl-pw-chars .pw-ch { display: inline-block; }
@@ -187,7 +204,14 @@
 
 <main class="hoja">
   <header>
-    <p class="eti">MflowSuite · para salir a vender</p>
+    <div class="arriba">
+      <p class="eti">MflowSuite · para salir a vender</p>
+      <button type="button" class="tema" id="tema" aria-pressed="false">
+        <svg class="luna" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sol" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <span id="temaTxt">Modo noche</span>
+      </button>
+    </div>
     <h1>Recompensalo: <em>cuánto cuesta</em>, cómo venderlo y a quién</h1>
     <p class="sub">La cuenta de lo que cuesta tener a cada cliente andando, con números que podés cambiar; tres formas de armar los planes, con precios en pesos; y los rubros de Argentina donde una tarjeta en el Wallet hace que la gente vuelva.</p>
     <nav class="indice" aria-label="Secciones"><a href="#t-calc">Costos</a><a href="#t-planes">Planes</a><a href="#t-rubros">Rubros</a></nav>
@@ -467,6 +491,25 @@
 
 <script>
 (function () {
+  // --- Modo claro / noche (claro por defecto; se recuerda en este navegador) ---------
+  var CLAVE = "recompensalo-tema";
+  function poner(tema) {
+    if (tema === "dark") document.documentElement.setAttribute("data-theme", "dark");
+    else document.documentElement.setAttribute("data-theme", "light");
+    var noche = tema === "dark";
+    document.getElementById("tema").setAttribute("aria-pressed", String(noche));
+    document.getElementById("temaTxt").textContent = noche ? "Modo claro" : "Modo noche";
+  }
+  var guardado = null;
+  try { guardado = localStorage.getItem(CLAVE); } catch (e) { /* sin almacenamiento: queda claro */ }
+  poner(guardado === "dark" ? "dark" : "light");
+  document.getElementById("tema").addEventListener("click", function () {
+    var nuevo = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    poner(nuevo);
+    try { localStorage.setItem(CLAVE, nuevo); } catch (e) { /* no se recuerda, igual cambia */ }
+  });
+})();
+(function () {
   // --- Calculadora ---------------------------------------------------------------
   var $ = function (id) { return document.getElementById(id); };
   var usd = function (n) { return "USD " + n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
@@ -611,7 +654,7 @@ setTimeout(function() {
       logo=document.getElementById('hl-pw-logo');
   if(!scene||!row||!charsEl||!slotEl||!logo) return;
   var spans=[];
-  for(var i=0;i<BRAND.length;i++){var s=document.createElement('span');s.className='pw-ch';s.textContent=BRAND[i];s.style.color='rgba(15,23,42,.62)';s.style.fontWeight='600';charsEl.appendChild(s);spans.push(s);}
+  for(var i=0;i<BRAND.length;i++){var s=document.createElement('span');s.className='pw-ch';s.textContent=BRAND[i];s.style.color='var(--pw-text)';s.style.fontWeight='600';charsEl.appendChild(s);spans.push(s);}
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     row.style.opacity=1; logo.style.position='static'; logo.classList.add('pw-glow'); slotEl.replaceWith(logo); return;
   }
@@ -622,7 +665,7 @@ setTimeout(function() {
   function mv(cx,cy,sx,sy,rot,a){logo.style.transform='translate('+(cx-LS/2)+'px,'+(cy-LS/2)+'px) rotate('+rot+'rad) scale('+sx+','+sy+')';logo.style.opacity=a;}
   var phase='intro',t0=null,idx=0,hop=null,done=false,lpos=[],spos=null;
   var lsq=spans.map(function(){return{at:-1};}),lsqAt=-1,lsX=1,lsY=1;
-  function uLS(now){for(var i=0;i<spans.length;i++){if(lsq[i].at<0)continue;var t=clamp((now-lsq[i].at)/SQD,0,1),res=spring(t);spans[i].style.transform='scaleX('+res[0]+') scaleY('+res[1]+')';spans[i].style.color=t<.28?'#2563EB':'rgba(15,23,42,.62)';if(t>=1){lsq[i].at=-1;spans[i].style.transform='';spans[i].style.color='';}}}
+  function uLS(now){for(var i=0;i<spans.length;i++){if(lsq[i].at<0)continue;var t=clamp((now-lsq[i].at)/SQD,0,1),res=spring(t);spans[i].style.transform='scaleX('+res[0]+') scaleY('+res[1]+')';spans[i].style.color=t<.28?'#2563EB':'var(--pw-text)';if(t>=1){lsq[i].at=-1;spans[i].style.transform='';spans[i].style.color='';}}}
   function uLogo(now){if(lsqAt<0)return;var t=clamp((now-lsqAt)/LSQ,0,1),res=spring(t);lsX=res[0];lsY=res[1];if(t>=1){lsqAt=-1;lsX=lsY=1;}}
   function tLogo(now){lsqAt=now;lsX=1.3;lsY=0.62;}
   function sh(from,to,h,dur,now){hop={from:{x:from.x,y:from.y},to:{x:to.x,y:to.y},h:h,dur:dur,t0:now};}
