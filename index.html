@@ -135,13 +135,15 @@
   .campo { display: grid; gap: 6px; align-content: start; min-width: 0; position: relative; }
   .cab-campo { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text); font-weight: 500; position: relative; }
   .cab-campo label { cursor: pointer; }
-  .control { display: flex; align-items: center; gap: 8px; }
+  .control { display: flex; align-items: center; position: relative; min-width: 0; }
   .control input, .control select { flex: 1; min-width: 0; height: 40px; background: var(--card2); color: var(--text); border: 1px solid var(--line2); border-radius: 8px;
     padding: 0 12px; font: 500 15px/1 var(--sans); font-variant-numeric: tabular-nums; transition: border-color 200ms ease, box-shadow 200ms ease; }
   .control select { cursor: pointer; }
   .control input:hover, .control select:hover { border-color: rgba(34,197,94,.5); }
   .control input:focus, .control select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(34,197,94,.18); }
-  .unidad { flex-shrink: 0; font-size: 12px; color: var(--muted); min-width: 64px; }
+  /* La unidad va adentro de la caja, a la derecha: al costado no entraba y se salía del recuadro. */
+  .unidad { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--muted); pointer-events: none; white-space: nowrap; }
+  .control:has(.unidad) input { padding-right: 84px; }
   .ayuda { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line2); background: transparent; color: var(--muted);
     font: 700 11px/1 var(--sans); cursor: pointer; display: inline-grid; place-items: center; padding: 0; transition: border-color 150ms ease, color 150ms ease; }
   .ayuda:hover, .ayuda[aria-expanded="true"] { border-color: var(--green); color: var(--green); }
@@ -152,6 +154,8 @@
   .margen { font-size: 13px; color: var(--muted); background: rgba(34,197,94,.08); border-radius: 8px; padding: 8px 10px; }
   .margen b { color: var(--green); font-variant-numeric: tabular-nums; }
   @media (max-width: 460px) { .campos { grid-template-columns: 1fr; } }
+  @media (min-width: 861px) and (max-width: 1000px) { .form-calc .campos { grid-template-columns: 1fr; } }
+  .form-calc, .resultado { overflow: hidden; }
 
 
   .frase { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; font-size: 15px; color: var(--text); }
