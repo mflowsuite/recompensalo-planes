@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Costos y rubros Recompensalo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap">
+<style>
+  /* Marca MflowSuite (oscura por decisión): una hoja de trabajo para salir a vender.
+     Arriba la cuenta (calculadora), abajo el mercado (rubros por familia). */
+  :root {
+    --bg: #020617; --card: #0F172A; --card2: #1E293B; --line: #1E293B; --line2: #334155;
+    --text: #F8FAFC; --muted: #94A3B8; --dim: #64748B;
+    --green: #22C55E; --blue: #60A5FA; --orange: #FBBF24; --red: #F87171;
+    --code: "Fira Code", ui-monospace, "Cascadia Mono", Consolas, monospace;
+    --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font: 400 15px/1.6 var(--sans); }
+  .hoja { max-width: 1080px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 40px; display: grid; gap: 40px; }
+  h1, h2, h3 { font-family: var(--code); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(26px, 4.4vw, 40px); line-height: 1.1; font-weight: 700; }
+  h1 em { font-style: normal; color: var(--green); }
+  h2 { font-size: 20px; font-weight: 600; }
+  h3 { font-size: 15px; font-weight: 600; }
+  p { margin: 0; }
+  .sub { color: var(--muted); max-width: 64ch; margin-top: 10px; }
+  .eti { font: 600 11px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .seccion { display: grid; gap: 16px; }
+  .seccion > header { display: grid; gap: 6px; }
+  .seccion > header p { color: var(--muted); max-width: 70ch; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* Calculadora */
+  .calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 16px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-width: 0; }
+  .campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  label.campo { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+  label.campo span small { color: var(--dim); }
+  .campo input, .campo select { width: 100%; background: var(--card2); color: var(--text); border: 1px solid var(--line2); border-radius: 8px;
+    padding: 9px 12px; font: 500 15px/1.2 var(--sans); font-variant-numeric: tabular-nums; transition: border-color 200ms ease, box-shadow 200ms ease; }
+  .campo input:hover, .campo select:hover { border-color: rgba(34,197,94,.5); }
+  .campo input:focus, .campo select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(34,197,94,.18); }
+  .campo.ancho { grid-column: 1 / -1; }
+  .resultado { display: grid; gap: 14px; }
+  .grande { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .cifra { background: var(--card2); border-radius: 10px; padding: 14px; display: grid; gap: 4px; }
+  .cifra b { font: 700 26px/1.1 var(--code); font-variant-numeric: tabular-nums; }
+  .cifra.clave b { color: var(--green); }
+  .cifra span { font-size: 12px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td, th { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { font: 600 11px/1.2 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  td.m { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.total td { border-bottom: 0; font-weight: 600; }
+  .nota { font-size: 12.5px; color: var(--dim); }
+
+  /* Listas de costos */
+  .tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .lista li { display: grid; gap: 2px; }
+  .lista li b { font-weight: 600; }
+  .lista li span { color: var(--muted); font-size: 13.5px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font: 600 11px/1.4 var(--sans); }
+  .b-verde { background: rgba(34,197,94,.12); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+  .b-azul { background: rgba(59,130,246,.12); color: var(--blue); border: 1px solid rgba(59,130,246,.3); }
+  .b-naranja { background: rgba(245,158,11,.12); color: var(--orange); border: 1px solid rgba(245,158,11,.3); }
+  .b-gris { background: rgba(148,163,184,.1); color: var(--muted); border: 1px solid var(--line2); }
+
+  /* Rubros */
+  .leyenda { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--muted); font-size: 13px; }
+  .leyenda > span { display: inline-flex; align-items: center; gap: 8px; }
+  .filtros { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filtro { background: transparent; color: var(--text); border: 1px solid var(--line2); border-radius: 20px; padding: 7px 16px;
+    font: 600 13px/1 var(--sans); cursor: pointer; transition: border-color 150ms ease, color 150ms ease, background 150ms ease; }
+  .filtro:hover { border-color: var(--green); color: var(--green); }
+  .filtro[aria-pressed="true"] { background: rgba(34,197,94,.12); border-color: var(--green); color: var(--green); }
+  .filtro:focus-visible, a:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .familia { display: grid; gap: 12px; }
+  .familia h3 { color: var(--muted); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  .rubros { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+  .rubro { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 10px; align-content: start; }
+  .rubro .cab { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+  .rubro h4 { margin: 0; font: 600 16px/1.3 var(--sans); }
+  .freq { flex-shrink: 0; display: inline-flex; gap: 3px; align-items: end; height: 16px; } /* barras: cuán seguido vuelve el cliente */
+  .freq i { width: 5px; border-radius: 2px; background: var(--line2); }
+  .freq i:nth-child(1) { height: 6px; } .freq i:nth-child(2) { height: 11px; } .freq i:nth-child(3) { height: 16px; }
+  .freq[data-n="1"] i:nth-child(-n+1), .freq[data-n="2"] i:nth-child(-n+2), .freq[data-n="3"] i:nth-child(-n+3) { background: var(--green); }
+  .rubro p { color: var(--muted); font-size: 14px; }
+  .rubro .premio { font-size: 13.5px; color: var(--text); border-top: 1px dashed var(--line2); padding-top: 8px; }
+  .rubro .premio span { color: var(--dim); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .menos { background: var(--card); border: 1px dashed var(--line2); border-radius: 12px; padding: 18px; display: grid; gap: 10px; }
+  .menos ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 6px; }
+  .menos b { color: var(--text); font-weight: 600; }
+
+
+  .indice { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .indice a { color: var(--text); text-decoration: none; border: 1px solid var(--line2); border-radius: 20px; padding: 6px 14px; font: 600 13px/1 var(--sans); transition: border-color 150ms ease, color 150ms ease; }
+  .indice a:hover { border-color: var(--green); color: var(--green); }
+  .planes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+  .plan { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+  .plan.reco { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 20px 25px rgba(0,0,0,.25); }
+  .plan .nom { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .plan .nom h3 { font-size: 18px; }
+  .precio { display: grid; gap: 2px; }
+  .precio b { font: 700 30px/1.1 var(--code); font-variant-numeric: tabular-nums; }
+  .precio span { color: var(--muted); font-size: 13px; }
+  .plan .para { color: var(--muted); font-size: 14px; }
+  .incluye { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+  .incluye li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; }
+  .incluye li svg { margin-top: 3px; color: var(--green); }
+  .incluye li.mas { color: var(--muted); }
+  .incluye li.mas svg { color: var(--muted); }
+  .plan .alta { border-top: 1px dashed var(--line2); padding-top: 10px; font-size: 13.5px; color: var(--muted); }
+  .plan .alta b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .variantes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .variante { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .variante.elegida { border-color: rgba(34,197,94,.5); }
+  .variante p { color: var(--muted); font-size: 14px; }
+  .variante dl { margin: 0; display: grid; gap: 6px; font-size: 13.5px; }
+  .variante dt { color: var(--text); font-weight: 600; }
+  .variante dd { margin: 0; color: var(--muted); }
+  .tabla-extra { overflow-x: auto; }
+  .tabla-extra table td:first-child { font-weight: 500; }
+  .guzel { background: var(--card2); border-radius: 12px; padding: 16px 18px; display: grid; gap: 6px; }
+  .guzel p { color: var(--muted); font-size: 14px; }
+  .guzel b { color: var(--text); }
+  @media (max-width: 920px) { .planes, .variantes { grid-template-columns: 1fr; } }
+
+  /* Pie */
+  footer.pie { display: grid; gap: 6px; justify-items: center; text-align: center; color: var(--dim); font-size: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+  #hl-pw-scene { position: relative; display: inline-block; margin-top: .75rem; }
+  #hl-pw-row { display: inline-flex; align-items: center; font-family: var(--sans); font-size: 11px; font-weight: 600; white-space: nowrap; color: rgba(255,255,255,.55); }
+  .hl-pw-by { color: rgba(255,255,255,.3); }
+  #hl-pw-slot { display: inline-block; width: 28px; height: 28px; margin: 0 5px; vertical-align: middle; flex-shrink: 0; }
+  #hl-pw-logo { position: absolute; top: 0; left: 0; width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none; }
+  #hl-pw-chars .pw-ch { display: inline-block; }
+  #hl-pw-logo.pw-glow { filter: drop-shadow(0 0 6px rgba(59,130,246,.9)); }
+  .hl-pw-wrap { text-align: center; padding: 4px 0 0; }
+
+  @media (max-width: 860px) { .calc, .tres { grid-template-columns: 1fr; } }
+  @media (max-width: 460px) { .campos, .grande { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<main class="hoja">
+  <header>
+    <p class="eti">MflowSuite · para salir a vender</p>
+    <h1>Recompensalo: <em>cuánto cuesta</em>, cómo venderlo y a quién</h1>
+    <p class="sub">La cuenta de lo que cuesta tener a cada cliente andando, con números que podés cambiar; tres formas de armar los planes, con precios en pesos; y los rubros de Argentina donde una tarjeta en el Wallet hace que la gente vuelva.</p>
+    <nav class="indice" aria-label="Secciones"><a href="#t-calc">Costos</a><a href="#t-planes">Planes</a><a href="#t-rubros">Rubros</a></nav>
+  </header>
+
+  <section class="seccion" aria-labelledby="t-calc">
+    <header>
+      <h2 id="t-calc">Calculadora de costos</h2>
+      <p>Cargados con los precios de octubre de 2026. Cambiá cualquier número y la cuenta se rehace sola. Los valores en dólares son los que cobran Hostinger, Apple y Cloudflare.</p>
+    </header>
+    <div class="calc">
+      <form class="panel campos" id="form" autocomplete="off">
+        <label class="campo"><span>Clientes totales</span><input id="clientes" type="number" min="1" max="500" value="6"></label>
+        <label class="campo"><span>Clientes por VPS <small>(6 cómodos)</small></span><input id="porvps" type="number" min="1" max="15" value="6"></label>
+        <label class="campo"><span>VPS por mes, USD <small>(renovación)</small></span><input id="vps" type="number" min="0" step="0.01" value="14.99"></label>
+        <label class="campo"><span>Backups por VPS, USD/mes</span><input id="backup" type="number" min="0" step="0.5" value="1.5"></label>
+        <label class="campo"><span>Apple Developer, USD/año</span><input id="apple" type="number" min="0" step="1" value="99"></label>
+        <label class="campo"><span>Dominio recompensalo.com, USD/año</span><input id="dominio" type="number" min="0" step="0.5" value="10.5"></label>
+        <label class="campo"><span>EasyPanel</span>
+          <select id="easypanel"><option value="0">Plan gratis (alcanza)</option><option value="10.9">Pago anual, USD 10,90 por VPS</option><option value="14.9">Pago mensual, USD 14,90 por VPS</option></select></label>
+        <label class="campo"><span>Dólar tarjeta <small>(30/09/2026)</small></span><input id="dolar" type="number" min="0" step="1" value="2002"></label>
+      </form>
+      <div class="panel resultado" aria-live="polite">
+        <div class="grande">
+          <div class="cifra clave"><span>Costo por cliente, por mes</span><b id="porCliente">—</b><span id="porClienteArs"></span></div>
+          <div class="cifra"><span>Costo total por mes</span><b id="total">—</b><span id="vpsNec"></span></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Concepto</th><th class="m" style="text-align:right">USD / mes</th></tr></thead>
+            <tbody id="detalle"></tbody>
+          </table>
+        </div>
+        <p class="nota">No incluye tu tiempo, impuestos ni la comisión de cobro: están abajo, en «Otros costos». Los avisos a los Wallet no tienen costo por mensaje, y el email sale por la casilla de cada cliente.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-costos">
+    <header>
+      <h2 id="t-costos">Lo que ya tenés y lo que falta contar</h2>
+      <p>Además del VPS y el dominio, hay un costo seguro que ya estás pagando y varios que no se ven en la factura del hosting.</p>
+    </header>
+    <div class="tres">
+      <div class="panel">
+        <span class="badge b-verde">Ya lo pagás</span>
+        <ul class="lista" style="margin-top:12px">
+          <li><b>VPS de Hostinger</b><span>KVM 2: 2 núcleos, 8 GB. USD 8,99 en promo, renueva a USD 12,99–14,99.</span></li>
+          <li><b>Dominio recompensalo.com</b><span>En Cloudflare, al costo: unos USD 10,50 por año.</span></li>
+          <li><b>Apple Developer</b><span>USD 99 por año. Sin él no hay Apple Wallet. Es una cuenta para todos tus clientes, así que pesa menos cuantos más tengas.</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <span class="badge b-naranja">Te falta contar</span>
+        <ul class="lista" style="margin-top:12px">
+          <li><b>Tu tiempo de alta</b><span>Instalación con la consola, marca, sucursales, programa y la capacitación: de 4 a 8 horas por cliente nuevo.</span></li>
+          <li><b>Soporte del mes</b><span>Las consultas de dueños y vendedoras. Ponele un número de horas por cliente.</span></li>
+          <li><b>Stickers NFC y QR</b><span>Entre USD 0,50 y 1 por sticker; uno o dos por mostrador.</span></li>
+          <li><b>Monotributo y cobro</b><span>Tu cuota de ARCA y la comisión de la plataforma con la que cobres.</span></li>
+          <li><b>Pesos contra dólares</b><span>Pagás en dólares y cobrás en pesos: el abono tiene que poder ajustarse.</span></li>
+          <li><b>recompensalo.com.ar</b><span>En nic.ar, en pesos, una vez por año. Opcional.</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <span class="badge b-gris">Gratis</span>
+        <ul class="lista" style="margin-top:12px">
+          <li><b>Google Wallet</b><span>La API y las notificaciones no tienen costo.</span></li>
+          <li><b>Avisos al iPhone</b><span>Las notificaciones de Apple Wallet son gratis.</span></li>
+          <li><b>Cloudflare</b><span>DNS y certificados de las direcciones de cada cliente.</span></li>
+          <li><b>EasyPanel</b><span>El plan gratis admite 3 proyectos con servicios ilimitados; la consola pone a todos los clientes en uno.</span></li>
+          <li><b>Email</b><span>Sale por la casilla de Google Workspace de cada comercio, como en Guzel.</span></li>
+          <li><b>WhatsApp</b><span>El sistema no manda mensajes de WhatsApp: no hay costo por mensaje.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="seccion" aria-labelledby="t-planes">
+    <header>
+      <h2 id="t-planes">Cómo venderlo: los planes</h2>
+      <p>La forma más fácil de vender es la de tres planes: cada uno incluye lo del anterior y suma lo que necesita un comercio más grande. El del medio es el que más conviene empujar. Precios por mes, en pesos, con dólar oficial de $ 1.540 (30/09/2026); actualizalos cada tres meses o atalos al dólar.</p>
+    </header>
+    <div class="planes">
+      <article class="plan">
+        <div class="nom"><h3>Esencial</h3></div>
+        <div class="precio"><b class="num">$ 55.000</b><span>por mes · ≈ USD 36</span></div>
+        <p class="para">Para el local único que quiere dejar la tarjetita de cartón: un café, una barbería, un lavadero.</p>
+        <ul class="incluye">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>1 sucursal</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Tarjeta en Apple Wallet, Google Wallet y web, con la marca del comercio</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Un programa: sellos, puntos, niveles, cashback o pases</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Alta con QR o sticker NFC en el mostrador</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Mostrador: escanear la tarjeta, cargar visitas y canjes</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Regalo de bienvenida y vencimiento de lo juntado</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Avisos a todos los clientes (notificación en el Wallet)</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>En el iPhone, la tarjeta aparece sola cerca del local</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Panel con la lista de clientes y su historial</span></li>
+        </ul>
+        <p class="alta">Alta: <b>$ 150.000</b> por única vez (instalación, marca, programa y QR).</p>
+      </article>
+      <article class="plan reco">
+        <div class="nom"><h3>Crecimiento</h3><span class="badge b-verde">El que conviene</span></div>
+        <div class="precio"><b class="num">$ 105.000</b><span>por mes · ≈ USD 68</span></div>
+        <p class="para">Para el comercio de 2 o 3 locales que quiere que la gente vuelva sola, sin estar mandando mensajes a mano.</p>
+        <ul class="incluye">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 3 sucursales, con ranking entre ellas</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Todo lo del plan Esencial</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Campañas automáticas: cumpleaños, «te extrañamos», «te falta poco», vencimientos</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>«¿Cómo te fue?»: opiniones y pedido de reseñas en Google</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Avisos a grupos y por email, con cupones de regalo</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Invitá a una amiga (referidos)</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Inicio con grupos de clientes y cosas para hacer</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Usuarios para el equipo, por sucursal</span></li>
+        </ul>
+        <p class="alta">Alta: <b>$ 250.000</b> por única vez (todo lo anterior y sus sucursales).</p>
+      </article>
+      <article class="plan">
+        <div class="nom"><h3>Cadena</h3></div>
+        <div class="precio"><b class="num">$ 199.000</b><span>por mes · ≈ USD 129</span></div>
+        <p class="para">Para cadenas como Guzel: muchas sucursales, equipo grande y clientes que vienen de otro sistema.</p>
+        <ul class="incluye">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 10 sucursales</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Todo lo del plan Crecimiento</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Pasamos los clientes del sistema anterior</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Conexión con el chatbot y con ChatGPT o Claude para preguntar por el negocio</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Capacitación a las vendedoras por videollamada</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Soporte prioritario por WhatsApp</span></li>
+            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: $ 12.000 por mes cada una</span></li>
+        </ul>
+        <p class="alta">Alta: <b>$ 450.000</b> por única vez (incluye la migración de clientes).</p>
+      </article>
+    </div>
+    <p class="nota">Pago anual: dos meses bonificados (pagan 10, usan 12). Margen: con un costo de unos USD 5 por cliente (≈ $ 10.000 a dólar tarjeta), cada plan cubre de sobra la infraestructura; lo que hay que cuidar es tu tiempo de soporte. Referencia del mercado: Boomerangme publica su plan de negocio desde USD 199 por mes.</p>
+
+    <div class="tabla-extra panel">
+      <h3 style="margin-bottom:10px">Adicionales, con cualquier plan</h3>
+      <table>
+        <thead><tr><th>Adicional</th><th>Precio</th><th>Cuándo se cobra</th></tr></thead>
+        <tbody>
+          <tr><td>Sucursal extra</td><td class="num">$ 12.000</td><td>por mes, cada una</td></tr>
+          <tr><td>Pasar clientes de otro sistema</td><td class="num">$ 120.000</td><td>una vez (incluido en Cadena)</td></tr>
+          <tr><td>Stickers NFC grabados + QR impresos</td><td class="num">$ 6.000</td><td>por mostrador, una vez</td></tr>
+          <tr><td>Conexión con chatbot o asistente de IA</td><td class="num">$ 40.000</td><td>por mes (incluido en Cadena)</td></tr>
+          <tr><td>Capacitación presencial</td><td class="num">$ 60.000</td><td>por visita, más viáticos</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:12px">Tres formas de armarlo</h3>
+      <div class="variantes">
+        <article class="variante elegida">
+          <span class="badge b-verde">Recomendada</span>
+          <h3>A. Tres planes + adicionales</h3>
+          <p>Lo de arriba. El cliente elige por tamaño y cada plan tiene un nombre que se entiende.</p>
+          <dl><dt>A favor</dt><dd>Se explica en un minuto; el del medio ancla la venta y el de arriba hace ver razonable al del medio.</dd>
+              <dt>En contra</dt><dd>Algún comercio va a querer una sola función del plan de arriba: para eso están los adicionales.</dd></dl>
+        </article>
+        <article class="variante">
+          <span class="badge b-gris">Todo incluido</span>
+          <h3>B. Un solo plan, por sucursal</h3>
+          <p>Todo el sistema, sin vueltas: $ 30.000 por sucursal por mes, mínimo 2 ($ 60.000). Alta según el tamaño.</p>
+          <dl><dt>A favor</dt><dd>Lo más simple de vender y de cobrar; crece solo cuando el cliente abre locales.</dd>
+              <dt>En contra</dt><dd>El local único paga funciones que no usa, y las cadenas grandes pagan mucho: Guzel serían $ 420.000.</dd></dl>
+        </article>
+        <article class="variante">
+          <span class="badge b-gris">A la carta</span>
+          <h3>C. Base + módulos</h3>
+          <p>Base de $ 45.000 (Esencial) y se suman módulos: campañas automáticas $ 20.000, opiniones y reseñas $ 15.000, avisos por email $ 15.000, referidos $ 10.000, chatbot e IA $ 40.000.</p>
+          <dl><dt>A favor</dt><dd>Cada uno paga lo que usa; sirve para comercios que desconfían.</dd>
+              <dt>En contra</dt><dd>Cuesta más explicarlo, se vende menos de cada módulo y te complica el soporte (quién tiene qué).</dd></dl>
+        </article>
+      </div>
+    </div>
+
+    <div class="guzel">
+      <h3>Cómo queda Guzel</h3>
+      <p>14 sucursales: plan <b>Cadena</b> ($ 199.000, hasta 10) + <b>4 sucursales extra</b> ($ 48.000) = <b>$ 247.000 por mes</b>. Como es el primer cliente y además es amiga, podés ofrecerle un precio de lanzamiento por 6 meses a cambio de usarla como caso para mostrar.</p>
+    </div>
+    <p class="nota">Hoy cada instalación trae todo el sistema: los planes se arman dejando apagado lo que no entra (campañas, referidos, avisos por email). Si un día hace falta que el sistema lo limite solo, se agrega el plan en la consola.</p>
+    <p class="nota">Son precios para salir a probar. Antes de fijarlos, preguntale a 5 o 6 comercios cuánto les parecería caro, barato y razonable, y ajustá.</p>
+  </section>
+
+  <section class="seccion" aria-labelledby="t-rubros">
+    <header>
+      <h2 id="t-rubros">Rubros donde encaja en Argentina</h2>
+      <p>Funciona mejor donde la gente vuelve seguido, el ticket se repite y el local conoce a sus clientes. Cada rubro trae el programa que más le conviene de los cinco que tiene Recompensalo y un premio de ejemplo.</p>
+    </header>
+    <div class="leyenda">
+      <span><span class="freq" data-n="3" aria-hidden="true"><i></i><i></i><i></i></span> Vuelve todas las semanas</span>
+      <span><span class="freq" data-n="2" aria-hidden="true"><i></i><i></i><i></i></span> Vuelve una o dos veces por mes</span>
+      <span><span class="freq" data-n="1" aria-hidden="true"><i></i><i></i><i></i></span> Vuelve cada uno o dos meses</span>
+    </div>
+    <div class="filtros" role="group" aria-label="Filtrar por programa">
+      <button type="button" class="filtro" data-f="todos" aria-pressed="true">Todos</button>
+      <button type="button" class="filtro" data-f="Sellos" aria-pressed="false">Sellos</button>
+      <button type="button" class="filtro" data-f="Puntos" aria-pressed="false">Puntos</button>
+      <button type="button" class="filtro" data-f="Niveles" aria-pressed="false">Niveles</button>
+      <button type="button" class="filtro" data-f="Cashback" aria-pressed="false">Cashback</button>
+      <button type="button" class="filtro" data-f="Pases" aria-pressed="false">Pases prepagos</button>
+    </div>
+    <div id="familias" class="seccion"></div>
+    <div class="menos">
+      <h3>Dónde rinde menos</h3>
+      <ul>
+        <li><b>Compras de una vez cada muchos años</b>: inmobiliarias, concesionarias, mueblerías. No hay visita que repetir.</li>
+        <li><b>Rubros con reglas propias para promociones</b>: farmacias (medicamentos), venta de alcohol o apuestas. Antes de vender, revisar qué se puede premiar.</li>
+        <li><b>Negocios sin mostrador ni registro de visitas</b>: si nadie carga la visita, la tarjeta no suma.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <span>Precios de referencia de octubre de 2026: confirmalos en cada proveedor antes de cerrar un presupuesto.</span>
+    <div class="hl-pw-wrap">
+      <a href="https://mflowsuite.com/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block;">
+        <div id="hl-pw-scene">
+          <div id="hl-pw-row" style="opacity:0;">
+            <span class="hl-pw-by">Powered by&nbsp;</span>
+            <span id="hl-pw-slot"></span>
+            <span id="hl-pw-chars"></span>
+          </div>
+          <img id="hl-pw-logo" src="data:image/png;base64,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" alt="MflowSuite">
+        </div>
+      </a>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function () {
+  // --- Calculadora ---------------------------------------------------------------
+  var $ = function (id) { return document.getElementById(id); };
+  var usd = function (n) { return "USD " + n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+  var ars = function (n) { return "$ " + Math.round(n).toLocaleString("es-AR"); };
+  function val(id, def) { var v = parseFloat($(id).value); return isNaN(v) || v < 0 ? def : v; }
+  function calcular() {
+    var clientes = Math.max(1, Math.round(val("clientes", 1)));
+    var porVps = Math.max(1, Math.round(val("porvps", 6)));
+    var vpsNec = Math.ceil(clientes / porVps);
+    var filas = [
+      ["VPS de Hostinger × " + vpsNec, val("vps", 0) * vpsNec],
+      ["Backups × " + vpsNec, val("backup", 0) * vpsNec],
+      ["EasyPanel × " + vpsNec, parseFloat($("easypanel").value) * vpsNec],
+      ["Apple Developer (anual ÷ 12)", val("apple", 0) / 12],
+      ["Dominio recompensalo.com (anual ÷ 12)", val("dominio", 0) / 12],
+      ["Google Wallet, avisos, Cloudflare", 0]
+    ];
+    var total = filas.reduce(function (s, f) { return s + f[1]; }, 0);
+    var porCliente = total / clientes;
+    $("detalle").innerHTML = filas.map(function (f) {
+      return "<tr><td>" + f[0] + "</td><td class='m'>" + (f[1] ? usd(f[1]) : "gratis") + "</td></tr>";
+    }).join("") + "<tr class='total'><td>Total por mes</td><td class='m'>" + usd(total) + "</td></tr>";
+    $("total").textContent = usd(total);
+    $("porCliente").textContent = usd(porCliente);
+    $("vpsNec").textContent = vpsNec + (vpsNec === 1 ? " VPS" : " VPS") + " para " + clientes + (clientes === 1 ? " cliente" : " clientes");
+    var dolar = parseFloat($("dolar").value);
+    $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
+  }
+  $("form").addEventListener("input", calcular);
+  $("form").addEventListener("submit", function (e) { e.preventDefault(); });
+  calcular();
+
+  // --- Rubros --------------------------------------------------------------------
+  // [nombre, frecuencia 1-3, programas, por qué, premio de ejemplo]
+  var FAMILIAS = [
+    ["Belleza y cuidado personal", [
+      ["Cejas y pestañas (brow bars)", 2, ["Sellos", "Pases"], "Mantenimiento cada 3 a 5 semanas: la visita se repite sola si hay un motivo.", "5 sellos → 10% de descuento"],
+      ["Peluquerías", 2, ["Sellos", "Puntos"], "Corte, color y tratamientos: los puntos premian el ticket alto, los sellos la visita.", "10 visitas → un brushing de regalo"],
+      ["Barberías", 3, ["Sellos", "Pases"], "Clientes que vuelven cada dos o tres semanas; el pase mensual fideliza al habitué.", "El 6.º corte, gratis"],
+      ["Uñas y manicuría", 2, ["Sellos"], "Esmaltado semipermanente cada 2 o 3 semanas: ritmo fijo y fácil de premiar.", "8 sellos → una kapping gratis"],
+      ["Depilación", 1, ["Pases", "Sellos"], "Se vende por sesiones: los pases prepagos ordenan el cobro y la vuelta.", "Pack de 6 sesiones"],
+      ["Spa y masajes", 1, ["Niveles", "Pases"], "Ticket alto y clientela fiel: los niveles dan estatus y descuento fijo.", "Nivel Oro: 15% siempre"]
+    ]],
+    ["Gastronomía", [
+      ["Cafeterías", 3, ["Sellos"], "El clásico «el 10.º café gratis», ahora en el celular y sin tarjetita de cartón.", "9 cafés → el 10.º gratis"],
+      ["Heladerías", 2, ["Sellos", "Puntos"], "Muy fuerte en temporada; los avisos de inactividad la sostienen en invierno.", "5 cucuruchos → 1/4 kg"],
+      ["Panaderías y pastelerías", 3, ["Puntos", "Cashback"], "Compra casi diaria con ticket variable: el cashback devuelve un poco de cada compra.", "5% de vuelta en saldo"],
+      ["Hamburgueserías y pizzerías", 2, ["Puntos", "Sellos"], "Delivery propio y salón: compiten con las apps de envío, la tarjeta los trae directo.", "8 pedidos → una papas grande"],
+      ["Restaurantes y bodegones", 1, ["Niveles", "Cashback"], "Visitas espaciadas pero ticket alto: el nivel premia a la mesa de siempre.", "Nivel Plata: postre de la casa"]
+    ]],
+    ["Deporte y bienestar", [
+      ["Gimnasios y boxes", 3, ["Pases", "Niveles"], "La asistencia es el producto: los niveles por visitas premian a quien no falta.", "20 clases en el mes → una semana gratis"],
+      ["Yoga, pilates y danza", 3, ["Pases"], "Se venden packs de clases: cada visita descuenta una del pase.", "Pack de 8 clases"],
+      ["Kinesiología y estética corporal", 2, ["Pases", "Sellos"], "Tratamientos por sesiones con turnos repetidos.", "Pack de 10 sesiones"]
+    ]],
+    ["Mascotas", [
+      ["Peluquería canina", 1, ["Sellos"], "Baño y corte cada 4 a 8 semanas: el sello mantiene el turno.", "6 baños → el 7.º gratis"],
+      ["Pet shops y veterinarias", 2, ["Puntos", "Cashback"], "Alimento todos los meses: el cashback lo vuelve a traer a la misma tienda.", "3% de vuelta en alimento"]
+    ]],
+    ["Comercios", [
+      ["Dietéticas y almacenes naturales", 3, ["Cashback", "Puntos"], "Compra semanal de productos sueltos; el saldo se usa en la próxima.", "5% de vuelta en saldo"],
+      ["Librerías y papelerías", 1, ["Puntos"], "Picos en el inicio de clases: los puntos se canjean en la próxima temporada.", "500 puntos → un cuaderno"],
+      ["Vinotecas", 2, ["Niveles", "Cashback"], "Clientes que compran por recomendación: los niveles premian al habitual (solo mayores de 18).", "Nivel Oro: 10% en toda la tienda"],
+      ["Ropa y calzado", 1, ["Cashback", "Niveles"], "Compras por temporada: el saldo a favor invita a volver en la siguiente.", "10% de vuelta para el próximo cambio"]
+    ]],
+    ["Servicios", [
+      ["Lavaderos de autos", 2, ["Sellos", "Pases"], "Lavado cada semana o cada quince días: ideal para el sello.", "5 lavados → el 6.º gratis"],
+      ["Lavanderías y tintorerías", 2, ["Sellos"], "Servicio que se repite y clientela del barrio.", "10 cargas → una gratis"],
+      ["Talleres y gomerías", 1, ["Niveles"], "Servicios cada algunos meses: el nivel da un descuento fijo al cliente de siempre.", "Nivel Plata: 10% en mano de obra"]
+    ]]
+  ];
+  var CLASE = { Sellos: "b-verde", Puntos: "b-azul", Niveles: "b-naranja", Cashback: "b-azul", Pases: "b-gris" };
+  var NOMBRE = { Pases: "Pases prepagos" };
+  var FREQ = { 1: "vuelve cada uno o dos meses", 2: "vuelve una o dos veces por mes", 3: "vuelve todas las semanas" };
+  function pintar(filtro) {
+    $("familias").innerHTML = FAMILIAS.map(function (fam) {
+      var rubros = fam[1].filter(function (r) { return filtro === "todos" || r[2].indexOf(filtro) >= 0; });
+      if (!rubros.length) return "";
+      return "<div class='familia'><h3>" + fam[0] + "</h3><div class='rubros'>" + rubros.map(function (r) {
+        return "<article class='rubro'><div class='cab'><h4>" + r[0] + "</h4><span class='freq' data-n='" + r[1] + "' role='img' aria-label='" + FREQ[r[1]] + "'><i></i><i></i><i></i></span></div>" +
+          "<div class='chips'>" + r[2].map(function (p) { return "<span class='badge " + CLASE[p] + "'>" + (NOMBRE[p] || p) + "</span>"; }).join("") + "</div>" +
+          "<p>" + r[3] + "</p><p class='premio'><span>Ejemplo: </span>" + r[4] + "</p></article>";
+      }).join("") + "</div></div>";
+    }).join("");
+  }
+  document.querySelectorAll(".filtro").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".filtro").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      pintar(b.dataset.f);
+    });
+  });
+  pintar("todos");
+})();
+
+// --- Powered by MflowSuite (animación del design system) -------------------------
+setTimeout(function() {
+  var BRAND='MflowSuite', LS=28, HD=290, FHD=680, SQD=480, LSQ=500, ID=650, THR=0.2;
+  var scene=document.getElementById('hl-pw-scene'), row=document.getElementById('hl-pw-row'),
+      charsEl=document.getElementById('hl-pw-chars'), slotEl=document.getElementById('hl-pw-slot'),
+      logo=document.getElementById('hl-pw-logo');
+  if(!scene||!row||!charsEl||!slotEl||!logo) return;
+  var spans=[];
+  for(var i=0;i<BRAND.length;i++){var s=document.createElement('span');s.className='pw-ch';s.textContent=BRAND[i];s.style.color='rgba(255,255,255,.55)';s.style.fontWeight='600';charsEl.appendChild(s);spans.push(s);}
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    row.style.opacity=1; logo.style.position='static'; logo.classList.add('pw-glow'); slotEl.replaceWith(logo); return;
+  }
+  var lerp=function(a,b,t){return a+(b-a)*t;}, clamp=function(v,a,b){return Math.max(a,Math.min(b,v));}, arc=function(t,h){return 4*h*t*(1-t);};
+  function spring(t){if(t<.15){var r=t/.15;return[lerp(1,1.35,r),lerp(1,.55,r)];}if(t<.40){var r=(t-.15)/.25;return[lerp(1.35,.88,r),lerp(.55,1.22,r)];}if(t<.70){var r=(t-.40)/.30;return[lerp(.88,1.04,r),lerp(1.22,.96,r)];}var r=(t-.70)/.30;return[lerp(1.04,1,r),lerp(.96,1,r)];}
+  function air(t){if(t<.45)return[lerp(1,.84,t/.45),lerp(1,1.2,t/.45)];if(t<.82)return[.84,1.2];var r=(t-.82)/.18;return[lerp(.84,1.28,r),lerp(1.2,.68,r)];}
+  function ctr(el){var er=el.getBoundingClientRect(),sr=scene.getBoundingClientRect();return{x:er.left-sr.left+er.width/2,y:er.top-sr.top+er.height/2};}
+  function mv(cx,cy,sx,sy,rot,a){logo.style.transform='translate('+(cx-LS/2)+'px,'+(cy-LS/2)+'px) rotate('+rot+'rad) scale('+sx+','+sy+')';logo.style.opacity=a;}
+  var phase='intro',t0=null,idx=0,hop=null,done=false,lpos=[],spos=null;
+  var lsq=spans.map(function(){return{at:-1};}),lsqAt=-1,lsX=1,lsY=1;
+  function uLS(now){for(var i=0;i<spans.length;i++){if(lsq[i].at<0)continue;var t=clamp((now-lsq[i].at)/SQD,0,1),res=spring(t);spans[i].style.transform='scaleX('+res[0]+') scaleY('+res[1]+')';spans[i].style.color=t<.28?'#6fa8ff':'rgba(255,255,255,.55)';if(t>=1){lsq[i].at=-1;spans[i].style.transform='';spans[i].style.color='';}}}
+  function uLogo(now){if(lsqAt<0)return;var t=clamp((now-lsqAt)/LSQ,0,1),res=spring(t);lsX=res[0];lsY=res[1];if(t>=1){lsqAt=-1;lsX=lsY=1;}}
+  function tLogo(now){lsqAt=now;lsX=1.3;lsY=0.62;}
+  function sh(from,to,h,dur,now){hop={from:{x:from.x,y:from.y},to:{x:to.x,y:to.y},h:h,dur:dur,t0:now};}
+  function frame(now){
+    if(!t0)t0=now; uLS(now);uLogo(now);
+    if(phase==='intro'){var t=clamp((now-t0)/ID,0,1);row.style.opacity=t;mv(-200,0,1,1,0,0);
+      if(t>=1){lpos=spans.map(ctr);spos=ctr(slotEl);var li=spans.length-1;phase='hop';idx=li;t0=now;sh({x:lpos[li].x+55,y:spos.y},{x:lpos[li].x,y:spos.y},40,HD,now);}}
+    else if(phase==='hop'){if(hop){var ht=clamp((now-hop.t0)/hop.dur,0,1);var lx=lerp(hop.from.x,hop.to.x,ht);var ly=lerp(hop.from.y,hop.to.y,ht)-arc(ht,hop.h);var rot=(ht<0.5?1:-1)*Math.sin(Math.PI*ht)*0.22;var sh2=lsqAt>=0?[lsX,lsY]:air(ht);mv(lx,ly,sh2[0],sh2[1],rot,1);
+      if(ht>=1){lsq[idx].at=now;tLogo(now);var fx=hop.to.x,fy=hop.to.y;idx--;if(idx>=0){sh({x:fx,y:fy},{x:lpos[idx].x,y:spos.y},40,HD,now);}else{phase='final';t0=now;sh({x:fx,y:fy},{x:spos.x,y:spos.y},70,FHD,now);}}}}
+    else if(phase==='final'){if(hop){var ht=clamp((now-hop.t0)/hop.dur,0,1);var lx=lerp(hop.from.x,hop.to.x,ht);var ly=lerp(hop.from.y,hop.to.y,ht)-arc(ht,hop.h);var rot=(ht<0.5?1:-1)*Math.sin(Math.PI*ht)*0.18;var sh2=lsqAt>=0?[lsX,lsY]:air(ht);mv(lx,ly,sh2[0],sh2[1],rot,1);
+      if(ht>=1){phase='done';tLogo(now);mv(spos.x,spos.y,lsX,lsY,0,1);logo.classList.add('pw-glow');}}}
+    else if(phase==='done'){mv(spos.x,spos.y,lsX,lsY,0,1);if(!done){done=true;return;}return;}
+    requestAnimationFrame(frame);
+  }
+  var started=false;
+  function start(){if(started)return;started=true;row.style.opacity='0';mv(-200,0,1,1,0,0);requestAnimationFrame(frame);}
+  function init(){var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){start();obs.disconnect();}});},{threshold:THR});obs.observe(scene);}
+  if(logo.complete){init();}else{logo.onload=init;logo.onerror=init;setTimeout(init,400);}
+},100);
+</script>
+
+</body>
+</html>
