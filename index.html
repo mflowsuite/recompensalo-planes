@@ -163,6 +163,7 @@
   .frase { position: relative; }
   .servidores { font-size: 13.5px; color: var(--muted); }
   .servidores b { color: var(--green); }
+  .servidores .aviso { color: var(--orange); }
 
   /* Pie */
   footer.pie { display: grid; gap: 6px; justify-items: center; text-align: center; color: var(--dim); font-size: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
@@ -196,26 +197,33 @@
     <div class="calc">
       <form class="panel form-calc" id="form" autocomplete="off">
         <fieldset>
-          <legend>Tus comercios</legend>
-          <div class="frase">
-            <label for="clientes">Tengo</label>
-            <input id="clientes" type="number" inputmode="numeric" min="1" max="500" step="1" value="6">
-            <span>comercios y entran hasta</span>
-            <input id="porvps" type="number" inputmode="numeric" min="1" max="15" step="1" value="6" aria-label="Comercios por servidor">
-            <label for="porvps">por servidor</label>
-            <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>«Comercios» son tus clientes: cada negocio que usa Recompensalo (no sus clientas). En cada servidor (un VPS de 2 núcleos y 8 GB) entran unos 6 comercios de 2 o 3 sucursales sin problemas. Con esos dos números se calcula cuántos servidores pagás y entre cuántos se reparten los gastos: con más comercios, cada uno te cuesta menos.</span>
+          <legend>Tus comercios y el servidor</legend>
+          <div class="campos">
+          <div class="campo">
+            <div class="cab-campo"><label for="clientes">Comercios</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Cuántos comercios usan Recompensalo: cada negocio es un cliente tuyo (no sus clientas). Todos van en un mismo servidor; según cuántos sean, conviene un plan de Hostinger más grande o más chico. Con más comercios, cada uno te cuesta menos.</span></div>
+            <div class="control"><input id="clientes" type="number" inputmode="numeric" min="1" max="500" step="1" value="6"><span class="unidad">comercios</span></div>
           </div>
-          <p class="servidores" id="servidoresTxt" aria-live="polite"></p>
+          <div class="campo">
+            <div class="cab-campo"><label for="plan">Servidor de Hostinger</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El plan del VPS donde van todos tus comercios. Se elige solo según la cantidad (el que alcanza y es más barato); si elegís otro a mano, la cuenta usa ese. Cuántos entran en cada uno: KVM 1 hasta 2, KVM 2 hasta 6, KVM 4 hasta 15, KVM 8 hasta 30 (comercios de 2 o 3 sucursales, dejando lugar para actualizar). El precio es el de renovación: el primer período sale menos.</span></div>
+            <div class="control"><select id="plan">
+              <option value="kvm1" data-precio="11.99" data-cap="2">KVM 1 · 1 núcleo, 4 GB</option>
+              <option value="kvm2" data-precio="14.99" data-cap="6">KVM 2 · 2 núcleos, 8 GB</option>
+              <option value="kvm4" data-precio="28.99" data-cap="15">KVM 4 · 4 núcleos, 16 GB</option>
+              <option value="kvm8" data-precio="49.99" data-cap="30">KVM 8 · 8 núcleos, 32 GB</option>
+            </select></div>
+          </div>
+          </div>
+          <p class="servidores" id="recoTxt" aria-live="polite"></p>
         </fieldset>
         <fieldset>
           <legend>Lo que pagás en dólares</legend>
           <div class="campos">
           <div class="campo">
-            <div class="cab-campo"><label for="vps">Servidor (Hostinger KVM 2)</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Lo que cobra Hostinger por cada VPS. El primer período sale USD 8,99 y después renueva a USD 12,99–14,99: calculá con la renovación para no llevarte sorpresas. Se multiplica por la cantidad de servidores.</span></div>
+            <div class="cab-campo"><label for="vps">Precio del servidor</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Se completa con el precio de renovación del plan elegido arriba (KVM 1 USD 11,99 · KVM 2 USD 14,99 · KVM 4 USD 28,99 · KVM 8 USD 49,99). El primer período sale menos (de USD 6,49 a 25,99): calculá con la renovación para no llevarte sorpresas. Si conseguís otro precio, cambialo acá.</span></div>
             <div class="control"><input id="vps" type="number" inputmode="decimal" min="0" step="0.01" value="14.99"><span class="unidad">USD/mes</span></div>
           </div>
           <div class="campo">
-            <div class="cab-campo"><label for="backup">Copias de seguridad</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Una copia diaria de las bases de cada servidor, guardada afuera (por ejemplo, en un almacenamiento en la nube). Es opcional pero recomendable: si el servidor se rompe, no perdés los datos de tus clientes. Se multiplica por la cantidad de servidores.</span></div>
+            <div class="cab-campo"><label for="backup">Copias de seguridad</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Hostinger incluye una copia por semana. Una copia diaria de las bases, guardada afuera (por ejemplo, en un almacenamiento en la nube), es lo recomendable: si el servidor se rompe, no perdés los datos de ningún comercio.</span></div>
             <div class="control"><input id="backup" type="number" inputmode="decimal" min="0" step="0.5" value="1.5"><span class="unidad">USD/mes</span></div>
           </div>
           <div class="campo">
@@ -227,8 +235,8 @@
             <div class="control"><input id="dominio" type="number" inputmode="decimal" min="0" step="0.5" value="10.5"><span class="unidad">USD/año</span></div>
           </div>
           <div class="campo">
-            <div class="cab-campo"><label for="easypanel">EasyPanel</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El panel con el que se administran los servidores. El plan gratis alcanza (hasta 3 proyectos, y todos tus clientes van en uno). El pago agrega funciones y soporte, y se cobra por servidor.</span></div>
-            <div class="control"><select id="easypanel"><option value="0">Plan gratis (alcanza)</option><option value="10.9">Pago anual: USD 10,90 por VPS</option><option value="14.9">Pago mensual: USD 14,90 por VPS</option></select></div>
+            <div class="cab-campo"><label for="easypanel">EasyPanel</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El panel con el que se administra el servidor. El plan gratis alcanza (hasta 3 proyectos, y todos tus comercios van en uno). El pago agrega funciones y soporte.</span></div>
+            <div class="control"><select id="easypanel"><option value="0">Plan gratis (alcanza)</option><option value="10.9">Pago anual: USD 10,90 por mes</option><option value="14.9">Pago mensual: USD 14,90</option></select></div>
           </div>
           </div>
         </fieldset>
@@ -245,7 +253,7 @@
       <div class="panel resultado" aria-live="polite">
         <div class="grande">
           <div class="cifra clave"><span class="cab-campo">Costo por comercio, por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El total del mes dividido por la cantidad de comercios. Es lo mínimo que te tiene que pagar cada uno para no perder plata, sin contar tu tiempo ni los impuestos.</span></span><b id="porCliente">—</b><span id="porClienteArs"></span></div>
-          <div class="cifra"><span class="cab-campo">Costo total por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>La suma de todo lo de la tabla: servidores, copias, EasyPanel y la parte del mes de Apple y del dominio.</span></span><b id="total">—</b><span id="vpsNec"></span></div>
+          <div class="cifra"><span class="cab-campo">Costo total por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>La suma de todo lo de la tabla: el servidor, las copias, EasyPanel y la parte del mes de Apple y del dominio.</span></span><b id="total">—</b><span id="vpsNec"></span></div>
         </div>
         <div style="overflow-x:auto">
           <table>
@@ -267,7 +275,7 @@
       <div class="panel">
         <span class="badge b-verde">Ya lo pagás</span>
         <ul class="lista" style="margin-top:12px">
-          <li><b>VPS de Hostinger</b><span>KVM 2: 2 núcleos, 8 GB. USD 8,99 en promo, renueva a USD 12,99–14,99.</span></li>
+          <li><b>Servidor de Hostinger</b><span>Uno solo para todos los comercios. KVM 1 USD 11,99 · KVM 2 USD 14,99 · KVM 4 USD 28,99 · KVM 8 USD 49,99 por mes (renovación; el primer período sale menos).</span></li>
           <li><b>Dominio recompensalo.com</b><span>En Cloudflare, al costo: unos USD 10,50 por año.</span></li>
           <li><b>Apple Developer</b><span>USD 99 por año. Sin él no hay Apple Wallet. Es una cuenta para todos tus clientes, así que pesa menos cuantos más tengas.</span></li>
         </ul>
@@ -460,14 +468,34 @@
   var usd = function (n) { return "USD " + n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
   var ars = function (n) { return "$ " + Math.round(n).toLocaleString("es-AR"); };
   function val(id, def) { var v = parseFloat($(id).value); return isNaN(v) || v < 0 ? def : v; }
+  var planManual = false;
+  function recomendado(n) {
+    var ops = Array.prototype.slice.call($("plan").options);
+    return ops.find(function (o) { return +o.dataset.cap >= n; }) || ops[ops.length - 1];
+  }
+  $("plan").addEventListener("input", function () { planManual = true; $("vps").value = $("plan").selectedOptions[0].dataset.precio; });
+  $("clientes").addEventListener("input", function () {
+    if (planManual) return;
+    var r = recomendado(Math.max(1, Math.round(val("clientes", 1))));
+    if ($("plan").value !== r.value) { $("plan").value = r.value; $("vps").value = r.dataset.precio; }
+  });
+  (function () { var r = recomendado(Math.max(1, Math.round(val("clientes", 1)))); $("plan").value = r.value; $("vps").value = r.dataset.precio; })();
   function calcular() {
     var clientes = Math.max(1, Math.round(val("clientes", 1)));
-    var porVps = Math.max(1, Math.round(val("porvps", 6)));
-    var vpsNec = Math.ceil(clientes / porVps);
+    var vpsNec = 1;
+    var elegido = $("plan").selectedOptions[0], cap = +elegido.dataset.cap, reco = recomendado(clientes);
+    var nombre = elegido.textContent.split(" · ")[0];
+    var txt;
+    if (clientes > 30) txt = "Más de 30 comercios no entran cómodos en un servidor: conviene sumar un segundo.";
+    else if (clientes > cap) txt = "<span class='aviso'>El " + nombre + " queda chico: entran hasta " + cap + ".</span> Para " + clientes + " comercios te conviene el <b>" + reco.textContent.split(" · ")[0] + "</b>.";
+    else if (elegido !== reco) txt = "Entran hasta " + cap + " en el " + nombre + ". Para " + clientes + " alcanza con el <b>" + reco.textContent.split(" · ")[0] + "</b>, que es más barato.";
+    else txt = "→ Para " + clientes + (clientes === 1 ? " comercio" : " comercios") + " te alcanza el <b>" + nombre + "</b>: entran hasta " + cap + ", así que te " + (cap - clientes === 1 ? "queda 1 lugar libre" : "quedan " + (cap - clientes) + " lugares libres") + ".";
+    if (cap === clientes && clientes <= 30 && elegido === reco) txt = "→ Para " + clientes + " comercios te alcanza el <b>" + nombre + "</b>, justo: el próximo comercio necesita el plan siguiente.";
+    $("recoTxt").innerHTML = txt;
     var filas = [
-      ["Servidores (Hostinger) × " + vpsNec, val("vps", 0) * vpsNec],
-      ["Backups × " + vpsNec, val("backup", 0) * vpsNec],
-      ["EasyPanel × " + vpsNec, parseFloat($("easypanel").value) * vpsNec],
+      ["Servidor Hostinger (" + nombre + ")", val("vps", 0)],
+      ["Copias de seguridad", val("backup", 0)],
+      ["EasyPanel", parseFloat($("easypanel").value)],
       ["Apple Developer (anual ÷ 12)", val("apple", 0) / 12],
       ["Dominio recompensalo.com (anual ÷ 12)", val("dominio", 0) / 12],
       ["Google Wallet, avisos, Cloudflare", 0]
@@ -479,11 +507,7 @@
     }).join("") + "<tr class='total'><td>Total por mes</td><td class='m'>" + usd(total) + "</td></tr>";
     $("total").textContent = usd(total);
     $("porCliente").textContent = usd(porCliente);
-    $("vpsNec").textContent = vpsNec + (vpsNec === 1 ? " servidor" : " servidores") + " para " + clientes + (clientes === 1 ? " comercio" : " comercios");
-    var libres = vpsNec * porVps - clientes;
-    $("servidoresTxt").innerHTML = "→ Necesitás <b>" + vpsNec + (vpsNec === 1 ? " servidor" : " servidores") + "</b>" +
-      (libres ? " · te " + (libres === 1 ? "queda 1 lugar libre" : "quedan " + libres + " lugares libres") + " para sumar comercios sin pagar otro"
-              : " · completo: el próximo comercio necesita otro servidor");
+    $("vpsNec").textContent = "Un servidor " + nombre + " para " + clientes + (clientes === 1 ? " comercio" : " comercios");
     var dolar = parseFloat($("dolar").value);
     document.querySelectorAll(".margen").forEach(function (m) {
       var precio = +m.dataset.precio, costo = dolar > 0 ? porCliente * dolar : 0;
