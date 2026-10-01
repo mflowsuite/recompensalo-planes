@@ -12,15 +12,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap">
 <style>
-  /* Marca MflowSuite (oscura por decisión): una hoja de trabajo para salir a vender.
+  /* Marca MflowSuite en claro (pedido de Martín: en oscuro no llegaba a leer): una hoja de trabajo para salir a vender.
      Arriba la cuenta (calculadora), abajo el mercado (rubros por familia). */
   :root {
-    --bg: #020617; --card: #0F172A; --card2: #1E293B; --line: #1E293B; --line2: #334155;
-    --text: #F8FAFC; --muted: #94A3B8; --dim: #64748B;
-    --green: #22C55E; --blue: #60A5FA; --orange: #FBBF24; --red: #F87171;
+    --bg: #F1F5F9; --card: #FFFFFF; --card2: #F8FAFC; --line: #E2E8F0; --line2: #CBD5E1;
+    --text: #0F172A; --muted: #475569; --dim: #64748B;
+    --green: #15803D; --blue: #1D4ED8; --orange: #B45309; --red: #B91C1C;
     --code: "Fira Code", ui-monospace, "Cascadia Mono", Consolas, monospace;
     --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-    color-scheme: dark;
+    color-scheme: light;
   }
   * { box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font: 400 15px/1.6 var(--sans); }
@@ -99,7 +99,7 @@
   .indice a:hover { border-color: var(--green); color: var(--green); }
   .planes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
   .plan { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
-  .plan.reco { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 20px 25px rgba(0,0,0,.25); }
+  .plan.reco { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 12px 24px rgba(15,23,42,.10); }
   .plan .nom { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .plan .nom h3 { font-size: 18px; }
   .precio { display: grid; gap: 2px; }
@@ -149,7 +149,7 @@
   .ayuda:hover, .ayuda[aria-expanded="true"] { border-color: var(--green); color: var(--green); }
   .ayuda:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
   .globo { position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: min(320px, calc(100vw - 48px)); background: var(--card2); color: var(--text);
-    border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; font: 400 13px/1.5 var(--sans); text-transform: none; letter-spacing: 0; box-shadow: 0 10px 25px rgba(0,0,0,.45); }
+    border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; font: 400 13px/1.5 var(--sans); text-transform: none; letter-spacing: 0; box-shadow: 0 10px 25px rgba(15,23,42,.18); }
   .cifra .cab-campo { color: var(--muted); font-weight: 400; font-size: 12px; }
   .margen { font-size: 13px; color: var(--muted); background: rgba(34,197,94,.08); border-radius: 8px; padding: 8px 10px; }
   .margen b { color: var(--green); font-variant-numeric: tabular-nums; }
@@ -172,8 +172,8 @@
   /* Pie */
   footer.pie { display: grid; gap: 6px; justify-items: center; text-align: center; color: var(--dim); font-size: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
   #hl-pw-scene { position: relative; display: inline-block; margin-top: .75rem; }
-  #hl-pw-row { display: inline-flex; align-items: center; font-family: var(--sans); font-size: 11px; font-weight: 600; white-space: nowrap; color: rgba(255,255,255,.55); }
-  .hl-pw-by { color: rgba(255,255,255,.3); }
+  #hl-pw-row { display: inline-flex; align-items: center; font-family: var(--sans); font-size: 11px; font-weight: 600; white-space: nowrap; color: rgba(15,23,42,.62); }
+  .hl-pw-by { color: rgba(15,23,42,.42); }
   #hl-pw-slot { display: inline-block; width: 28px; height: 28px; margin: 0 5px; vertical-align: middle; flex-shrink: 0; }
   #hl-pw-logo { position: absolute; top: 0; left: 0; width: 28px; height: 28px; border-radius: 50%; object-fit: cover; pointer-events: none; }
   #hl-pw-chars .pw-ch { display: inline-block; }
@@ -611,7 +611,7 @@ setTimeout(function() {
       logo=document.getElementById('hl-pw-logo');
   if(!scene||!row||!charsEl||!slotEl||!logo) return;
   var spans=[];
-  for(var i=0;i<BRAND.length;i++){var s=document.createElement('span');s.className='pw-ch';s.textContent=BRAND[i];s.style.color='rgba(255,255,255,.55)';s.style.fontWeight='600';charsEl.appendChild(s);spans.push(s);}
+  for(var i=0;i<BRAND.length;i++){var s=document.createElement('span');s.className='pw-ch';s.textContent=BRAND[i];s.style.color='rgba(15,23,42,.62)';s.style.fontWeight='600';charsEl.appendChild(s);spans.push(s);}
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     row.style.opacity=1; logo.style.position='static'; logo.classList.add('pw-glow'); slotEl.replaceWith(logo); return;
   }
@@ -622,7 +622,7 @@ setTimeout(function() {
   function mv(cx,cy,sx,sy,rot,a){logo.style.transform='translate('+(cx-LS/2)+'px,'+(cy-LS/2)+'px) rotate('+rot+'rad) scale('+sx+','+sy+')';logo.style.opacity=a;}
   var phase='intro',t0=null,idx=0,hop=null,done=false,lpos=[],spos=null;
   var lsq=spans.map(function(){return{at:-1};}),lsqAt=-1,lsX=1,lsY=1;
-  function uLS(now){for(var i=0;i<spans.length;i++){if(lsq[i].at<0)continue;var t=clamp((now-lsq[i].at)/SQD,0,1),res=spring(t);spans[i].style.transform='scaleX('+res[0]+') scaleY('+res[1]+')';spans[i].style.color=t<.28?'#6fa8ff':'rgba(255,255,255,.55)';if(t>=1){lsq[i].at=-1;spans[i].style.transform='';spans[i].style.color='';}}}
+  function uLS(now){for(var i=0;i<spans.length;i++){if(lsq[i].at<0)continue;var t=clamp((now-lsq[i].at)/SQD,0,1),res=spring(t);spans[i].style.transform='scaleX('+res[0]+') scaleY('+res[1]+')';spans[i].style.color=t<.28?'#2563EB':'rgba(15,23,42,.62)';if(t>=1){lsq[i].at=-1;spans[i].style.transform='';spans[i].style.color='';}}}
   function uLogo(now){if(lsqAt<0)return;var t=clamp((now-lsqAt)/LSQ,0,1),res=spring(t);lsX=res[0];lsY=res[1];if(t>=1){lsqAt=-1;lsX=lsY=1;}}
   function tLogo(now){lsqAt=now;lsX=1.3;lsY=0.62;}
   function sh(from,to,h,dur,now){hop={from:{x:from.x,y:from.y},to:{x:to.x,y:to.y},h:h,dur:dur,t0:now};}
