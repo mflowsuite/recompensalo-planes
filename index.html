@@ -41,14 +41,6 @@
   /* Calculadora */
   .calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 16px; }
   .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; min-width: 0; }
-  .campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-  label.campo { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
-  label.campo span small { color: var(--dim); }
-  .campo input, .campo select { width: 100%; background: var(--card2); color: var(--text); border: 1px solid var(--line2); border-radius: 8px;
-    padding: 9px 12px; font: 500 15px/1.2 var(--sans); font-variant-numeric: tabular-nums; transition: border-color 200ms ease, box-shadow 200ms ease; }
-  .campo input:hover, .campo select:hover { border-color: rgba(34,197,94,.5); }
-  .campo input:focus, .campo select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(34,197,94,.18); }
-  .campo.ancho { grid-column: 1 / -1; }
   .resultado { display: grid; gap: 14px; }
   .grande { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .cifra { background: var(--card2); border-radius: 10px; padding: 14px; display: grid; gap: 4px; }
@@ -135,6 +127,32 @@
   .guzel b { color: var(--text); }
   @media (max-width: 920px) { .planes, .variantes { grid-template-columns: 1fr; } }
 
+
+  .form-calc { display: grid; gap: 18px; align-content: start; }
+  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; min-width: 0; }
+  legend { padding: 0; margin-bottom: 10px; font: 600 11px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
+  .campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; align-items: start; }
+  .campo { display: grid; gap: 6px; align-content: start; min-width: 0; position: relative; }
+  .cab-campo { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text); font-weight: 500; position: relative; }
+  .cab-campo label { cursor: pointer; }
+  .control { display: flex; align-items: center; gap: 8px; }
+  .control input, .control select { flex: 1; min-width: 0; height: 40px; background: var(--card2); color: var(--text); border: 1px solid var(--line2); border-radius: 8px;
+    padding: 0 12px; font: 500 15px/1 var(--sans); font-variant-numeric: tabular-nums; transition: border-color 200ms ease, box-shadow 200ms ease; }
+  .control select { cursor: pointer; }
+  .control input:hover, .control select:hover { border-color: rgba(34,197,94,.5); }
+  .control input:focus, .control select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(34,197,94,.18); }
+  .unidad { flex-shrink: 0; font-size: 12px; color: var(--muted); min-width: 64px; }
+  .ayuda { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line2); background: transparent; color: var(--muted);
+    font: 700 11px/1 var(--sans); cursor: pointer; display: inline-grid; place-items: center; padding: 0; transition: border-color 150ms ease, color 150ms ease; }
+  .ayuda:hover, .ayuda[aria-expanded="true"] { border-color: var(--green); color: var(--green); }
+  .ayuda:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .globo { position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: min(320px, calc(100vw - 48px)); background: var(--card2); color: var(--text);
+    border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; font: 400 13px/1.5 var(--sans); text-transform: none; letter-spacing: 0; box-shadow: 0 10px 25px rgba(0,0,0,.45); }
+  .cifra .cab-campo { color: var(--muted); font-weight: 400; font-size: 12px; }
+  .margen { font-size: 13px; color: var(--muted); background: rgba(34,197,94,.08); border-radius: 8px; padding: 8px 10px; }
+  .margen b { color: var(--green); font-variant-numeric: tabular-nums; }
+  @media (max-width: 460px) { .campos { grid-template-columns: 1fr; } }
+
   /* Pie */
   footer.pie { display: grid; gap: 6px; justify-items: center; text-align: center; color: var(--dim); font-size: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
   #hl-pw-scene { position: relative; display: inline-block; margin-top: .75rem; }
@@ -165,21 +183,59 @@
       <p>Cargados con los precios de octubre de 2026. Cambiá cualquier número y la cuenta se rehace sola. Los valores en dólares son los que cobran Hostinger, Apple y Cloudflare.</p>
     </header>
     <div class="calc">
-      <form class="panel campos" id="form" autocomplete="off">
-        <label class="campo"><span>Clientes totales</span><input id="clientes" type="number" min="1" max="500" value="6"></label>
-        <label class="campo"><span>Clientes por VPS <small>(6 cómodos)</small></span><input id="porvps" type="number" min="1" max="15" value="6"></label>
-        <label class="campo"><span>VPS por mes, USD <small>(renovación)</small></span><input id="vps" type="number" min="0" step="0.01" value="14.99"></label>
-        <label class="campo"><span>Backups por VPS, USD/mes</span><input id="backup" type="number" min="0" step="0.5" value="1.5"></label>
-        <label class="campo"><span>Apple Developer, USD/año</span><input id="apple" type="number" min="0" step="1" value="99"></label>
-        <label class="campo"><span>Dominio recompensalo.com, USD/año</span><input id="dominio" type="number" min="0" step="0.5" value="10.5"></label>
-        <label class="campo"><span>EasyPanel</span>
-          <select id="easypanel"><option value="0">Plan gratis (alcanza)</option><option value="10.9">Pago anual, USD 10,90 por VPS</option><option value="14.9">Pago mensual, USD 14,90 por VPS</option></select></label>
-        <label class="campo"><span>Dólar tarjeta <small>(30/09/2026)</small></span><input id="dolar" type="number" min="0" step="1" value="2002"></label>
+      <form class="panel form-calc" id="form" autocomplete="off">
+        <fieldset>
+          <legend>Tus clientes</legend>
+          <div class="campos">
+          <div class="campo">
+            <div class="cab-campo"><label for="clientes">Clientes totales</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Cuántos comercios usan (o vas a tener usando) Recompensalo. Cambia cuántos servidores hacen falta y entre cuántos se reparten los gastos fijos (Apple, dominio): con más clientes, cada uno te cuesta menos.</span></div>
+            <div class="control"><input id="clientes" type="number" inputmode="decimal" min="1" max="500" step="1" value="6"><span class="unidad">comercios</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="porvps">Clientes por servidor</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Cuántos comercios ponés en cada VPS. Para comercios de 2 o 3 sucursales, en un servidor de 2 núcleos y 8 GB, 6 es lo cómodo. Si subís el número necesitás menos servidores y baja el costo, pero el servidor anda más justo.</span></div>
+            <div class="control"><input id="porvps" type="number" inputmode="decimal" min="1" max="15" step="1" value="6"><span class="unidad">por VPS</span></div>
+          </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Lo que pagás en dólares</legend>
+          <div class="campos">
+          <div class="campo">
+            <div class="cab-campo"><label for="vps">Servidor (Hostinger KVM 2)</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Lo que cobra Hostinger por cada VPS. El primer período sale USD 8,99 y después renueva a USD 12,99–14,99: calculá con la renovación para no llevarte sorpresas. Se multiplica por la cantidad de servidores.</span></div>
+            <div class="control"><input id="vps" type="number" inputmode="decimal" min="0" step="0.01" value="14.99"><span class="unidad">USD/mes</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="backup">Copias de seguridad</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Una copia diaria de las bases de cada servidor, guardada afuera (por ejemplo, en un almacenamiento en la nube). Es opcional pero recomendable: si el servidor se rompe, no perdés los datos de tus clientes. Se multiplica por la cantidad de servidores.</span></div>
+            <div class="control"><input id="backup" type="number" inputmode="decimal" min="0" step="0.5" value="1.5"><span class="unidad">USD/mes</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="apple">Apple Developer</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>La cuota anual de Apple para que las tarjetas funcionen en Apple Wallet. Es una sola cuenta para todos tus clientes: se divide por 12 y se reparte entre todos.</span></div>
+            <div class="control"><input id="apple" type="number" inputmode="decimal" min="0" step="1" value="99"><span class="unidad">USD/año</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="dominio">Dominio recompensalo.com</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Lo que cobra Cloudflare por el dominio cada año. Uno solo para todos los clientes (guzel.recompensalo.com, etc.): se divide por 12.</span></div>
+            <div class="control"><input id="dominio" type="number" inputmode="decimal" min="0" step="0.5" value="10.5"><span class="unidad">USD/año</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="easypanel">EasyPanel</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El panel con el que se administran los servidores. El plan gratis alcanza (hasta 3 proyectos, y todos tus clientes van en uno). El pago agrega funciones y soporte, y se cobra por servidor.</span></div>
+            <div class="control"><select id="easypanel"><option value="0">Plan gratis (alcanza)</option><option value="10.9">Pago anual: USD 10,90 por VPS</option><option value="14.9">Pago mensual: USD 14,90 por VPS</option></select></div>
+          </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Para pasar a pesos</legend>
+          <div class="campos">
+          <div class="campo">
+            <div class="cab-campo"><label for="dolar">Dólar tarjeta</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El dólar con el que pagás con tarjeta argentina, con impuestos (el 30/09/2026 estaba en $ 2.002). Solo cambia la conversión a pesos: tu costo por cliente y el margen de los planes de abajo.</span></div>
+            <div class="control"><input id="dolar" type="number" inputmode="decimal" min="0" step="1" value="2002"><span class="unidad">$ por USD</span></div>
+          </div>
+          </div>
+        </fieldset>
       </form>
       <div class="panel resultado" aria-live="polite">
         <div class="grande">
-          <div class="cifra clave"><span>Costo por cliente, por mes</span><b id="porCliente">—</b><span id="porClienteArs"></span></div>
-          <div class="cifra"><span>Costo total por mes</span><b id="total">—</b><span id="vpsNec"></span></div>
+          <div class="cifra clave"><span class="cab-campo">Costo por cliente, por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El total del mes dividido por la cantidad de clientes. Es lo mínimo que te tiene que pagar cada comercio para no perder plata, sin contar tu tiempo ni los impuestos.</span></span><b id="porCliente">—</b><span id="porClienteArs"></span></div>
+          <div class="cifra"><span class="cab-campo">Costo total por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>La suma de todo lo de la tabla: servidores, copias, EasyPanel y la parte del mes de Apple y del dominio.</span></span><b id="total">—</b><span id="vpsNec"></span></div>
         </div>
         <div style="overflow-x:auto">
           <table>
@@ -187,7 +243,7 @@
             <tbody id="detalle"></tbody>
           </table>
         </div>
-        <p class="nota">No incluye tu tiempo, impuestos ni la comisión de cobro: están abajo, en «Otros costos». Los avisos a los Wallet no tienen costo por mensaje, y el email sale por la casilla de cada cliente.</p>
+        <p class="nota">Si cambiás un valor, se rehacen esta cuenta y el <b>margen de cada plan</b> en «Cómo venderlo», más abajo. No incluye tu tiempo, impuestos ni la comisión de cobro (están en «Lo que falta contar»).</p>
       </div>
     </div>
   </section>
@@ -241,6 +297,7 @@
       <article class="plan">
         <div class="nom"><h3>Esencial</h3></div>
         <div class="precio"><b class="num">$ 55.000</b><span>por mes · ≈ USD 36</span></div>
+        <p class="margen" data-precio="55000">Tu margen: <b>—</b></p>
         <p class="para">Para el local único que quiere dejar la tarjetita de cartón: un café, una barbería, un lavadero.</p>
         <ul class="incluye">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>1 sucursal</span></li>
@@ -258,6 +315,7 @@
       <article class="plan reco">
         <div class="nom"><h3>Crecimiento</h3><span class="badge b-verde">El que conviene</span></div>
         <div class="precio"><b class="num">$ 105.000</b><span>por mes · ≈ USD 68</span></div>
+        <p class="margen" data-precio="105000">Tu margen: <b>—</b></p>
         <p class="para">Para el comercio de 2 o 3 locales que quiere que la gente vuelva sola, sin estar mandando mensajes a mano.</p>
         <ul class="incluye">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 3 sucursales, con ranking entre ellas</span></li>
@@ -274,6 +332,7 @@
       <article class="plan">
         <div class="nom"><h3>Cadena</h3></div>
         <div class="precio"><b class="num">$ 199.000</b><span>por mes · ≈ USD 129</span></div>
+        <p class="margen" data-precio="199000">Tu margen: <b>—</b></p>
         <p class="para">Para cadenas como Guzel: muchas sucursales, equipo grande y clientes que vienen de otro sistema.</p>
         <ul class="incluye">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 10 sucursales</span></li>
@@ -412,6 +471,12 @@
     $("porCliente").textContent = usd(porCliente);
     $("vpsNec").textContent = vpsNec + (vpsNec === 1 ? " VPS" : " VPS") + " para " + clientes + (clientes === 1 ? " cliente" : " clientes");
     var dolar = parseFloat($("dolar").value);
+    document.querySelectorAll(".margen").forEach(function (m) {
+      var precio = +m.dataset.precio, costo = dolar > 0 ? porCliente * dolar : 0;
+      m.innerHTML = dolar > 0
+        ? "Tu margen: <b>" + ars(precio - costo) + "</b> por mes (costo " + ars(costo) + ", " + Math.round((precio - costo) / precio * 100) + "%)"
+        : "Cargá el dólar arriba para ver tu margen";
+    });
     $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
   }
   $("form").addEventListener("input", calcular);
@@ -478,6 +543,22 @@
     });
   });
   pintar("todos");
+
+  function cerrarGlobos(salvo) {
+    document.querySelectorAll(".ayuda[aria-expanded='true']").forEach(function (b) {
+      if (b !== salvo) { b.setAttribute("aria-expanded", "false"); b.nextElementSibling.hidden = true; }
+    });
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".ayuda");
+    if (!b) { if (!e.target.closest(".globo")) cerrarGlobos(); return; }
+    e.preventDefault();
+    var abrir = b.getAttribute("aria-expanded") !== "true";
+    cerrarGlobos(b);
+    b.setAttribute("aria-expanded", String(abrir));
+    b.nextElementSibling.hidden = !abrir;
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarGlobos(); });
 })();
 
 // --- Powered by MflowSuite (animación del design system) -------------------------
