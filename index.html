@@ -186,6 +186,22 @@
   :root[data-theme="dark"] .tema .sol { display: inline; }
   :root[data-theme="dark"] .tema .luna { display: none; }
 
+
+  .precio-edit { display: inline-flex; align-items: baseline; gap: 6px; cursor: text; }
+  .precio-edit .signo { font: 700 24px/1 var(--code); color: var(--muted); }
+  .precio .precio-in { width: 7.2em; font: 700 28px/1.1 var(--code); }
+  .alta .precio-in { width: 6.5em; font: 600 14px/1 var(--sans); }
+  .alta .precio-edit .signo, .incluye .precio-edit .signo { font: 600 14px/1 var(--sans); color: var(--text); }
+  .incluye .precio-in { width: 5.5em; font: 600 14px/1 var(--sans); }
+  .precio-in { background: transparent; color: var(--text); border: 0; border-bottom: 2px dashed var(--line2); border-radius: 0; padding: 2px 0;
+    font-variant-numeric: tabular-nums; transition: border-color 150ms ease; -moz-appearance: textfield; }
+  .precio-in::-webkit-outer-spin-button, .precio-in::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .precio-in:hover { border-bottom-color: var(--green); }
+  .precio-in:focus { outline: none; border-bottom: 2px solid var(--green); }
+  .precios-barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 16px; }
+  .precios-barra p { color: var(--muted); font-size: 14px; max-width: 70ch; }
+
   /* Pie */
   footer.pie { display: grid; gap: 6px; justify-items: center; text-align: center; color: var(--dim); font-size: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
   #hl-pw-scene { position: relative; display: inline-block; margin-top: .75rem; }
@@ -276,6 +292,12 @@
             <div class="control"><input id="dolar" type="number" inputmode="decimal" min="0" step="1" value="2002"><span class="unidad">$ por USD</span></div>
           </div>
           </div>
+          <div class="campos" style="margin-top:14px">
+          <div class="campo">
+            <div class="cab-campo"><label for="oficial">Dólar oficial</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El dólar oficial (venta) del día, que es el que se usa para comparar tus precios en pesos con los de afuera (el 30/09/2026 estaba en $ 1.540). Solo cambia el «≈ USD» que aparece debajo de cada plan.</span></div>
+            <div class="control"><input id="oficial" type="number" inputmode="numeric" min="0" step="1" value="1540"><span class="unidad">$ por USD</span></div>
+          </div>
+          </div>
         </fieldset>
       </form>
       <div class="panel resultado" aria-live="polite">
@@ -339,11 +361,15 @@
       <h2 id="t-planes">Cómo venderlo: los planes</h2>
       <p>La forma más fácil de vender es la de tres planes: cada uno incluye lo del anterior y suma lo que necesita un comercio más grande. El del medio es el que más conviene empujar. Precios por mes, en pesos, con dólar oficial de $ 1.540 (30/09/2026); actualizalos cada tres meses o atalos al dólar.</p>
     </header>
+    <div class="precios-barra">
+      <p>Los precios son editables: tocá cualquier número y cambiá. Se recalculan el margen, el equivalente en dólares y el ejemplo de Guzel; quedan guardados en este navegador.</p>
+      <button type="button" class="tema" id="preciosReset">Volver a los sugeridos</button>
+    </div>
     <div class="planes">
       <article class="plan">
         <div class="nom"><h3>Esencial</h3></div>
-        <div class="precio"><b class="num">$ 55.000</b><span>por mes · ≈ USD 36</span></div>
-        <p class="margen" data-precio="55000">Tu margen: <b>—</b></p>
+        <div class="precio"><label class="precio-edit" for="p-esencial"><span class="signo">$</span><input id="p-esencial" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="55000" data-defecto="55000" aria-label="Precio por mes del plan Esencial"></label><span id="usd-esencial">por mes · ≈ USD 36</span></div>
+        <p class="margen" data-plan="p-esencial">Tu margen: <b>—</b></p>
         <p class="para">Para el local único que quiere dejar la tarjetita de cartón: un café, una barbería, un lavadero.</p>
         <ul class="incluye">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>1 sucursal</span></li>
@@ -356,12 +382,12 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>En el iPhone, la tarjeta aparece sola cerca del local</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Panel con la lista de clientes y su historial</span></li>
         </ul>
-        <p class="alta">Alta: <b>$ 150.000</b> por única vez (instalación, marca, programa y QR).</p>
+        <p class="alta">Alta: <label class="precio-edit" for="a-esencial"><span class="signo">$</span><input id="a-esencial" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="150000" data-defecto="150000" aria-label="Alta del plan esencial"></label> por única vez (instalación, marca, programa y QR).</p>
       </article>
       <article class="plan reco">
         <div class="nom"><h3>Crecimiento</h3><span class="badge b-verde">El que conviene</span></div>
-        <div class="precio"><b class="num">$ 105.000</b><span>por mes · ≈ USD 68</span></div>
-        <p class="margen" data-precio="105000">Tu margen: <b>—</b></p>
+        <div class="precio"><label class="precio-edit" for="p-crecimiento"><span class="signo">$</span><input id="p-crecimiento" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="105000" data-defecto="105000" aria-label="Precio por mes del plan Crecimiento"></label><span id="usd-crecimiento">por mes · ≈ USD 68</span></div>
+        <p class="margen" data-plan="p-crecimiento">Tu margen: <b>—</b></p>
         <p class="para">Para el comercio de 2 o 3 locales que quiere que la gente vuelva sola, sin estar mandando mensajes a mano.</p>
         <ul class="incluye">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 3 sucursales, con ranking entre ellas</span></li>
@@ -373,12 +399,12 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Inicio con grupos de clientes y cosas para hacer</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Usuarios para el equipo, por sucursal</span></li>
         </ul>
-        <p class="alta">Alta: <b>$ 250.000</b> por única vez (todo lo anterior y sus sucursales).</p>
+        <p class="alta">Alta: <label class="precio-edit" for="a-crecimiento"><span class="signo">$</span><input id="a-crecimiento" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="250000" data-defecto="250000" aria-label="Alta del plan crecimiento"></label> por única vez (todo lo anterior y sus sucursales).</p>
       </article>
       <article class="plan">
         <div class="nom"><h3>Cadena</h3></div>
-        <div class="precio"><b class="num">$ 199.000</b><span>por mes · ≈ USD 129</span></div>
-        <p class="margen" data-precio="199000">Tu margen: <b>—</b></p>
+        <div class="precio"><label class="precio-edit" for="p-cadena"><span class="signo">$</span><input id="p-cadena" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="199000" data-defecto="199000" aria-label="Precio por mes del plan Cadena"></label><span id="usd-cadena">por mes · ≈ USD 129</span></div>
+        <p class="margen" data-plan="p-cadena">Tu margen: <b>—</b></p>
         <p class="para">Para cadenas como Guzel: muchas sucursales, equipo grande y clientes que vienen de otro sistema.</p>
         <ul class="incluye">
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 10 sucursales</span></li>
@@ -387,9 +413,9 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Conexión con el chatbot y con ChatGPT o Claude para preguntar por el negocio</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Capacitación a las vendedoras por videollamada</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Soporte prioritario por WhatsApp</span></li>
-            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: $ 12.000 por mes cada una</span></li>
+            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: <label class="precio-edit" for="p-extra"><span class="signo">$</span><input id="p-extra" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="12000" data-defecto="12000" aria-label="Precio por mes de cada sucursal extra"></label> por mes cada una</span></li>
         </ul>
-        <p class="alta">Alta: <b>$ 450.000</b> por única vez (incluye la migración de clientes).</p>
+        <p class="alta">Alta: <label class="precio-edit" for="a-cadena"><span class="signo">$</span><input id="a-cadena" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="450000" data-defecto="450000" aria-label="Alta del plan cadena"></label> por única vez (incluye la migración de clientes).</p>
       </article>
     </div>
     <p class="nota">Pago anual: dos meses bonificados (pagan 10, usan 12). Margen: con un costo de unos USD 5 por cliente (≈ $ 10.000 a dólar tarjeta), cada plan cubre de sobra la infraestructura; lo que hay que cuidar es tu tiempo de soporte. Referencia del mercado: Boomerangme publica su plan de negocio desde USD 199 por mes.</p>
@@ -437,7 +463,7 @@
 
     <div class="guzel">
       <h3>Cómo queda Guzel</h3>
-      <p>14 sucursales: plan <b>Cadena</b> ($ 199.000, hasta 10) + <b>4 sucursales extra</b> ($ 48.000) = <b>$ 247.000 por mes</b>. Como es el primer cliente y además es amiga, podés ofrecerle un precio de lanzamiento por 6 meses a cambio de usarla como caso para mostrar.</p>
+      <p>14 sucursales: plan <b>Cadena</b> (<span id="g-cadena">$ 199.000</span>, hasta 10) + <b>4 sucursales extra</b> (<span id="g-extra">$ 48.000</span>) = <b id="g-total">$ 247.000 por mes</b>. Como es el primer cliente y además es amiga, podés ofrecerle un precio de lanzamiento por 6 meses a cambio de usarla como caso para mostrar.</p>
     </div>
     <p class="nota">Hoy cada instalación trae todo el sistema: los planes se arman dejando apagado lo que no entra (campañas, referidos, avisos por email). Si un día hace falta que el sistema lo limite solo, se agrega el plan en la consola.</p>
     <p class="nota">Son precios para salir a probar. Antes de fijarlos, preguntale a 5 o 6 comercios cuánto les parecería caro, barato y razonable, y ajustá.</p>
@@ -556,14 +582,37 @@
     $("porCliente").textContent = usd(porCliente);
     $("vpsNec").textContent = "Un servidor " + nombre + " para " + clientes + (clientes === 1 ? " comercio" : " comercios");
     var dolar = parseFloat($("dolar").value);
+    var oficial = parseFloat($("oficial").value);
+    ["esencial", "crecimiento", "cadena"].forEach(function (k) {
+      var v = parseFloat($("p-" + k).value) || 0;
+      $("usd-" + k).textContent = "por mes" + (oficial > 0 ? " · ≈ USD " + Math.round(v / oficial).toLocaleString("es-AR") : "");
+    });
+    var cadena = parseFloat($("p-cadena").value) || 0, extra = (parseFloat($("p-extra").value) || 0) * 4;
+    $("g-cadena").textContent = ars(cadena); $("g-extra").textContent = ars(extra); $("g-total").textContent = ars(cadena + extra) + " por mes";
     document.querySelectorAll(".margen").forEach(function (m) {
-      var precio = +m.dataset.precio, costo = dolar > 0 ? porCliente * dolar : 0;
+      var precio = parseFloat($(m.dataset.plan).value) || 0, costo = dolar > 0 ? porCliente * dolar : 0;
       m.innerHTML = dolar > 0
-        ? "Tu margen: <b>" + ars(precio - costo) + "</b> por mes (costo " + ars(costo) + ", " + Math.round((precio - costo) / precio * 100) + "%)"
+        ? "Tu margen: <b>" + ars(precio - costo) + "</b> por mes (costo " + ars(costo) + (precio > 0 ? ", " + Math.round((precio - costo) / precio * 100) + "%" : "") + ")"
         : "Cargá el dólar arriba para ver tu margen";
     });
     $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
   }
+  var CLAVE_PRECIOS = "recompensalo-precios";
+  var precios = Array.prototype.slice.call(document.querySelectorAll(".precio-in"));
+  try {
+    var guardados = JSON.parse(localStorage.getItem(CLAVE_PRECIOS) || "{}");
+    precios.forEach(function (i) { if (guardados[i.id] != null) i.value = guardados[i.id]; });
+  } catch (e) { /* sin almacenamiento: quedan los sugeridos */ }
+  function guardarPrecios() {
+    var d = {}; precios.forEach(function (i) { d[i.id] = i.value; });
+    try { localStorage.setItem(CLAVE_PRECIOS, JSON.stringify(d)); } catch (e) { /* no se recuerda, igual calcula */ }
+  }
+  precios.forEach(function (i) { i.addEventListener("input", function () { guardarPrecios(); calcular(); }); });
+  $("preciosReset").addEventListener("click", function () {
+    precios.forEach(function (i) { i.value = i.dataset.defecto; });
+    try { localStorage.removeItem(CLAVE_PRECIOS); } catch (e) {}
+    calcular();
+  });
   $("form").addEventListener("input", calcular);
   $("form").addEventListener("submit", function (e) { e.preventDefault(); });
   calcular();
