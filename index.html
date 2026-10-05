@@ -311,7 +311,7 @@
             <tbody id="detalle"></tbody>
           </table>
         </div>
-        <p class="nota">Si cambiás un valor, se rehacen esta cuenta y el <b>margen de cada plan</b> en «Cómo venderlo», más abajo. No incluye tu tiempo, impuestos ni la comisión de cobro (están en «Lo que falta contar»).</p>
+        <p class="nota">Si cambiás un valor, se rehacen esta cuenta y el <b>margen del plan</b> en «Cómo venderlo», más abajo. No incluye tu tiempo, impuestos ni la comisión de cobro (están en «Lo que falta contar»).</p>
       </div>
     </div>
   </section>
@@ -348,7 +348,7 @@
           <li><b>Avisos al iPhone</b><span>Las notificaciones de Apple Wallet son gratis.</span></li>
           <li><b>Cloudflare</b><span>DNS y certificados de las direcciones de cada cliente.</span></li>
           <li><b>EasyPanel</b><span>El plan gratis admite 3 proyectos con servicios ilimitados; la consola pone a todos los clientes en uno.</span></li>
-          <li><b>Email</b><span>Sale por la casilla de Google Workspace de cada comercio, como en Guzel.</span></li>
+          <li><b>Email</b><span>Sale por la casilla de Google Workspace de cada comercio.</span></li>
           <li><b>WhatsApp</b><span>El sistema no manda mensajes de WhatsApp: no hay costo por mensaje.</span></li>
         </ul>
       </div>
@@ -358,114 +358,58 @@
 
   <section class="seccion" aria-labelledby="t-planes">
     <header>
-      <h2 id="t-planes">Cómo venderlo: los planes</h2>
-      <p>La forma más fácil de vender es la de tres planes: cada uno incluye lo del anterior y suma lo que necesita un comercio más grande. El del medio es el que más conviene empujar. Precios por mes, en pesos, con dólar oficial de $ 1.540 (30/09/2026); actualizalos cada tres meses o atalos al dólar.</p>
+      <h2 id="t-planes">Cómo venderlo: un plan único</h2>
+      <p>Un solo plan con todo el sistema, que crece con las sucursales del comercio. Precios por mes, en pesos, con dólar oficial de $ 1.540 (30/09/2026); actualizalos cada tres meses o atalos al dólar.</p>
     </header>
     <div class="precios-barra">
-      <p>Los precios son editables: tocá cualquier número y cambiá. Se recalculan el margen, el equivalente en dólares y el ejemplo de Guzel; quedan guardados en este navegador.</p>
+      <p>Los precios son editables: tocá cualquier número y cambiá. Se recalculan el margen, el equivalente en dólares y el ejemplo; quedan guardados en este navegador.</p>
       <button type="button" class="tema" id="preciosReset">Volver a los sugeridos</button>
     </div>
-    <div class="planes">
-      <article class="plan">
-        <div class="nom"><h3>Esencial</h3></div>
-        <div class="precio"><label class="precio-edit" for="p-esencial"><span class="signo">$</span><input id="p-esencial" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="55000" data-defecto="55000" aria-label="Precio por mes del plan Esencial"></label><span id="usd-esencial">por mes · ≈ USD 36</span></div>
-        <p class="margen" data-plan="p-esencial">Tu margen: <b>—</b></p>
-        <p class="para">Para el local único que quiere dejar la tarjetita de cartón: un café, una barbería, un lavadero.</p>
+    <div class="planes" style="grid-template-columns:minmax(0,560px);justify-content:center">
+      <article class="plan reco">
+        <div class="nom"><h3>Plan único</h3><span class="badge b-verde">Todo incluido</span></div>
+        <div class="precio"><label class="precio-edit" for="p-unico"><span class="signo">$</span><input id="p-unico" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="75000" data-defecto="75000" aria-label="Precio por mes del plan único, con 1 sucursal"></label><span id="usd-unico">por mes · ≈ USD 49</span></div>
+        <p class="margen" data-plan="p-unico">Tu margen: <b>—</b></p>
+        <p class="para">Para cualquier comercio: desde el local único que quiere dejar la tarjetita de cartón hasta la cadena con muchas sucursales.</p>
         <ul class="incluye">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>1 sucursal</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>1 sucursal (cada sucursal extra se suma aparte)</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Tarjeta en Apple Wallet, Google Wallet y web, con la marca del comercio</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Un programa: sellos, puntos, niveles, cashback o pases</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Alta con QR o sticker NFC en el mostrador</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Alta con QR o sticker NFC en el mostrador, o desde la web del comercio</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Mostrador: escanear la tarjeta, cargar visitas y canjes</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Regalo de bienvenida y vencimiento de lo juntado</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Avisos a todos los clientes (notificación en el Wallet)</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>En el iPhone, la tarjeta aparece sola cerca del local</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Panel con la lista de clientes y su historial</span></li>
-        </ul>
-        <p class="alta">Alta: <label class="precio-edit" for="a-esencial"><span class="signo">$</span><input id="a-esencial" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="150000" data-defecto="150000" aria-label="Alta del plan esencial"></label> por única vez (instalación, marca, programa y QR).</p>
-      </article>
-      <article class="plan reco">
-        <div class="nom"><h3>Crecimiento</h3><span class="badge b-verde">El que conviene</span></div>
-        <div class="precio"><label class="precio-edit" for="p-crecimiento"><span class="signo">$</span><input id="p-crecimiento" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="105000" data-defecto="105000" aria-label="Precio por mes del plan Crecimiento"></label><span id="usd-crecimiento">por mes · ≈ USD 68</span></div>
-        <p class="margen" data-plan="p-crecimiento">Tu margen: <b>—</b></p>
-        <p class="para">Para el comercio de 2 o 3 locales que quiere que la gente vuelva sola, sin estar mandando mensajes a mano.</p>
-        <ul class="incluye">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 3 sucursales, con ranking entre ellas</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Todo lo del plan Esencial</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Regalo de bienvenida (con vencimiento) y vencimiento de lo juntado</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Avisos a todos los clientes o a grupos (notificación en el Wallet y por email), con cupones de regalo</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Campañas automáticas: cumpleaños, «te extrañamos», «te falta poco», vencimientos</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>«¿Cómo te fue?»: opiniones y pedido de reseñas en Google</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Avisos a grupos y por email, con cupones de regalo</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Invitá a una amiga (referidos)</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Inicio con grupos de clientes y cosas para hacer</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Invitá a un amigo (referidos)</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>En el iPhone, la tarjeta aparece sola cerca del local</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Panel con la lista de clientes, su historial y ranking entre sucursales</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Usuarios para el equipo, por sucursal</span></li>
+            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: <label class="precio-edit" for="p-extra"><span class="signo">$</span><input id="p-extra" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="25000" data-defecto="25000" aria-label="Precio por mes de cada sucursal extra"></label> por mes cada una</span></li>
         </ul>
-        <p class="alta">Alta: <label class="precio-edit" for="a-crecimiento"><span class="signo">$</span><input id="a-crecimiento" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="250000" data-defecto="250000" aria-label="Alta del plan crecimiento"></label> por única vez (todo lo anterior y sus sucursales).</p>
-      </article>
-      <article class="plan">
-        <div class="nom"><h3>Cadena</h3></div>
-        <div class="precio"><label class="precio-edit" for="p-cadena"><span class="signo">$</span><input id="p-cadena" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="199000" data-defecto="199000" aria-label="Precio por mes del plan Cadena"></label><span id="usd-cadena">por mes · ≈ USD 129</span></div>
-        <p class="margen" data-plan="p-cadena">Tu margen: <b>—</b></p>
-        <p class="para">Para cadenas como Guzel: muchas sucursales, equipo grande y clientes que vienen de otro sistema.</p>
-        <ul class="incluye">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Hasta 10 sucursales</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Todo lo del plan Crecimiento</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Pasamos los clientes del sistema anterior</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Conexión con el chatbot y con ChatGPT o Claude para preguntar por el negocio</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Capacitación a las vendedoras por videollamada</span></li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Soporte prioritario por WhatsApp</span></li>
-            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: <label class="precio-edit" for="p-extra"><span class="signo">$</span><input id="p-extra" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="12000" data-defecto="12000" aria-label="Precio por mes de cada sucursal extra"></label> por mes cada una</span></li>
-        </ul>
-        <p class="alta">Alta: <label class="precio-edit" for="a-cadena"><span class="signo">$</span><input id="a-cadena" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="450000" data-defecto="450000" aria-label="Alta del plan cadena"></label> por única vez (incluye la migración de clientes).</p>
+        <p class="alta">Alta: <label class="precio-edit" for="a-unico"><span class="signo">$</span><input id="a-unico" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="150000" data-defecto="150000" aria-label="Alta del plan único"></label> por única vez (instalación, marca, programa y QR).</p>
       </article>
     </div>
-    <p class="nota">Pago anual: dos meses bonificados (pagan 10, usan 12). Margen: con un costo de unos USD 5 por cliente (≈ $ 10.000 a dólar tarjeta), cada plan cubre de sobra la infraestructura; lo que hay que cuidar es tu tiempo de soporte. Referencia del mercado: Boomerangme publica su plan de negocio desde USD 199 por mes.</p>
+    <p class="nota">Pago anual: dos meses bonificados (pagan 10, usan 12). Margen: con un costo de unos USD 5 por comercio (≈ $ 10.000 a dólar tarjeta), el plan cubre de sobra la infraestructura; lo que hay que cuidar es tu tiempo de soporte. Referencia del mercado: Boomerangme publica su plan de negocio desde USD 199 por mes.</p>
 
     <div class="tabla-extra panel">
-      <h3 style="margin-bottom:10px">Adicionales, con cualquier plan</h3>
+      <h3 style="margin-bottom:10px">Adicionales</h3>
       <table>
         <thead><tr><th>Adicional</th><th>Precio</th><th>Cuándo se cobra</th></tr></thead>
         <tbody>
-          <tr><td>Sucursal extra</td><td class="num">$ 12.000</td><td>por mes, cada una</td></tr>
-          <tr><td>Pasar clientes de otro sistema</td><td class="num">$ 120.000</td><td>una vez (incluido en Cadena)</td></tr>
+          <tr><td>Sucursal extra</td><td class="num" id="t-extra">$ 25.000</td><td>por mes, cada una</td></tr>
+          <tr><td>Pasar clientes de otro sistema</td><td class="num">$ 120.000</td><td>una vez</td></tr>
           <tr><td>Stickers NFC grabados + QR impresos</td><td class="num">$ 6.000</td><td>por mostrador, una vez</td></tr>
-          <tr><td>Conexión con chatbot o asistente de IA</td><td class="num">$ 40.000</td><td>por mes (incluido en Cadena)</td></tr>
           <tr><td>Capacitación presencial</td><td class="num">$ 60.000</td><td>por visita, más viáticos</td></tr>
         </tbody>
       </table>
     </div>
 
-    <div>
-      <h3 style="margin-bottom:12px">Tres formas de armarlo</h3>
-      <div class="variantes">
-        <article class="variante elegida">
-          <span class="badge b-verde">Recomendada</span>
-          <h3>A. Tres planes + adicionales</h3>
-          <p>Lo de arriba. El cliente elige por tamaño y cada plan tiene un nombre que se entiende.</p>
-          <dl><dt>A favor</dt><dd>Se explica en un minuto; el del medio ancla la venta y el de arriba hace ver razonable al del medio.</dd>
-              <dt>En contra</dt><dd>Algún comercio va a querer una sola función del plan de arriba: para eso están los adicionales.</dd></dl>
-        </article>
-        <article class="variante">
-          <span class="badge b-gris">Todo incluido</span>
-          <h3>B. Un solo plan, por sucursal</h3>
-          <p>Todo el sistema, sin vueltas: $ 30.000 por sucursal por mes, mínimo 2 ($ 60.000). Alta según el tamaño.</p>
-          <dl><dt>A favor</dt><dd>Lo más simple de vender y de cobrar; crece solo cuando el cliente abre locales.</dd>
-              <dt>En contra</dt><dd>El local único paga funciones que no usa, y las cadenas grandes pagan mucho: Guzel serían $ 420.000.</dd></dl>
-        </article>
-        <article class="variante">
-          <span class="badge b-gris">A la carta</span>
-          <h3>C. Base + módulos</h3>
-          <p>Base de $ 45.000 (Esencial) y se suman módulos: campañas automáticas $ 20.000, opiniones y reseñas $ 15.000, avisos por email $ 15.000, referidos $ 10.000, chatbot e IA $ 40.000.</p>
-          <dl><dt>A favor</dt><dd>Cada uno paga lo que usa; sirve para comercios que desconfían.</dd>
-              <dt>En contra</dt><dd>Cuesta más explicarlo, se vende menos de cada módulo y te complica el soporte (quién tiene qué).</dd></dl>
-        </article>
-      </div>
-    </div>
-
     <div class="guzel">
-      <h3>Cómo queda Guzel</h3>
-      <p>14 sucursales: plan <b>Cadena</b> (<span id="g-cadena">$ 199.000</span>, hasta 10) + <b>4 sucursales extra</b> (<span id="g-extra">$ 48.000</span>) = <b id="g-total">$ 247.000 por mes</b>. Como es el primer cliente y además es amiga, podés ofrecerle un precio de lanzamiento por 6 meses a cambio de usarla como caso para mostrar.</p>
+      <h3>Ejemplos</h3>
+      <p>Un local: <b id="e-1">$ 75.000 por mes</b>. Tres sucursales: <b id="e-3">$ 125.000 por mes</b>. Diez sucursales: <b id="e-10">$ 300.000 por mes</b>.</p>
     </div>
-    <p class="nota">Hoy cada instalación trae todo el sistema: los planes se arman dejando apagado lo que no entra (campañas, referidos, avisos por email). Si un día hace falta que el sistema lo limite solo, se agrega el plan en la consola.</p>
+    <p class="nota">Cada instalación trae todo el sistema. La conexión con el chatbot y con ChatGPT o Claude, y el Inicio con grupos de clientes y cosas para hacer, no forman parte del plan.</p>
     <p class="nota">Son precios para salir a probar. Antes de fijarlos, preguntale a 5 o 6 comercios cuánto les parecería caro, barato y razonable, y ajustá.</p>
   </section>
 
@@ -583,12 +527,10 @@
     $("vpsNec").textContent = "Un servidor " + nombre + " para " + clientes + (clientes === 1 ? " comercio" : " comercios");
     var dolar = parseFloat($("dolar").value);
     var oficial = parseFloat($("oficial").value);
-    ["esencial", "crecimiento", "cadena"].forEach(function (k) {
-      var v = parseFloat($("p-" + k).value) || 0;
-      $("usd-" + k).textContent = "por mes" + (oficial > 0 ? " · ≈ USD " + Math.round(v / oficial).toLocaleString("es-AR") : "");
-    });
-    var cadena = parseFloat($("p-cadena").value) || 0, extra = (parseFloat($("p-extra").value) || 0) * 4;
-    $("g-cadena").textContent = ars(cadena); $("g-extra").textContent = ars(extra); $("g-total").textContent = ars(cadena + extra) + " por mes";
+    var unico = parseFloat($("p-unico").value) || 0, extra = parseFloat($("p-extra").value) || 0;
+    $("usd-unico").textContent = "por mes" + (oficial > 0 ? " · ≈ USD " + Math.round(unico / oficial).toLocaleString("es-AR") : "");
+    $("t-extra").textContent = ars(extra);
+    [1, 3, 10].forEach(function (n) { $("e-" + n).textContent = ars(unico + extra * (n - 1)) + " por mes"; });
     document.querySelectorAll(".margen").forEach(function (m) {
       var precio = parseFloat($(m.dataset.plan).value) || 0, costo = dolar > 0 ? porCliente * dolar : 0;
       m.innerHTML = dolar > 0
@@ -597,7 +539,7 @@
     });
     $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
   }
-  var CLAVE_PRECIOS = "recompensalo-precios";
+  var CLAVE_PRECIOS = "recompensalo-precios-unico";
   var precios = Array.prototype.slice.call(document.querySelectorAll(".precio-in"));
   try {
     var guardados = JSON.parse(localStorage.getItem(CLAVE_PRECIOS) || "{}");
