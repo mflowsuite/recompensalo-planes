@@ -279,6 +279,10 @@
             <div class="control"><input id="dominio" type="number" inputmode="decimal" min="0" step="0.5" value="10.5"><span class="unidad">USD/año</span></div>
           </div>
           <div class="campo">
+            <div class="cab-campo"><label for="resend">Resend (emails)</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El servicio que manda los emails de todos los comercios (bienvenida, avisos y campañas) desde mflowsuite.com. El plan Pro cuesta USD 20 por mes e incluye 50.000 emails; pasado eso, USD 0,90 cada 1.000. Una sola cuenta para todos.</span></div>
+            <div class="control"><input id="resend" type="number" inputmode="decimal" min="0" step="1" value="20"><span class="unidad">USD/mes</span></div>
+          </div>
+          <div class="campo">
             <div class="cab-campo"><label for="easypanel">EasyPanel</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El panel con el que se administra el servidor. El plan gratis alcanza (hasta 3 proyectos, y todos tus comercios van en uno). El pago agrega funciones y soporte.</span></div>
             <div class="control"><select id="easypanel"><option value="0">Plan gratis (alcanza)</option><option value="10.9">Pago anual: USD 10,90 por mes</option><option value="14.9">Pago mensual: USD 14,90</option></select></div>
           </div>
@@ -303,7 +307,7 @@
       <div class="panel resultado" aria-live="polite">
         <div class="grande">
           <div class="cifra clave"><span class="cab-campo">Costo por comercio, por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El total del mes dividido por la cantidad de comercios. Es lo mínimo que te tiene que pagar cada uno para no perder plata, sin contar tu tiempo ni los impuestos.</span></span><b id="porCliente">—</b><span id="porClienteArs"></span></div>
-          <div class="cifra"><span class="cab-campo">Costo total por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>La suma de todo lo de la tabla: el servidor, las copias, EasyPanel y la parte del mes de Apple y del dominio.</span></span><b id="total">—</b><span id="vpsNec"></span></div>
+          <div class="cifra"><span class="cab-campo">Costo total por mes <button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>La suma de todo lo de la tabla: el servidor, las copias, EasyPanel, Resend y la parte del mes de Apple y del dominio.</span></span><b id="total">—</b><span id="vpsNec"></span></div>
         </div>
         <div style="overflow-x:auto">
           <table>
@@ -514,6 +518,7 @@
       ["EasyPanel", parseFloat($("easypanel").value)],
       ["Apple Developer (anual ÷ 12)", val("apple", 0) / 12],
       ["Dominio recompensalo.com (anual ÷ 12)", val("dominio", 0) / 12],
+      ["Resend (emails)", val("resend", 0)],
       ["Google Wallet, avisos, Cloudflare", 0]
     ];
     var total = filas.reduce(function (s, f) { return s + f[1]; }, 0);
