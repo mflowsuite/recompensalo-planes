@@ -161,6 +161,10 @@
   .cifra .cab-campo { color: var(--muted); font-weight: 400; font-size: 12px; }
   .margen { font-size: 13px; color: var(--muted); background: rgba(34,197,94,.08); border-radius: 8px; padding: 8px 10px; }
   .margen b { color: var(--green); font-variant-numeric: tabular-nums; }
+  .margen .cuenta-tit { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .margen .fila { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; color: var(--text); font-variant-numeric: tabular-nums; }
+  .margen .fila.resta { color: var(--muted); }
+  .margen .fila.queda { border-top: 1px solid var(--line2); margin-top: 4px; padding-top: 6px; font-weight: 600; }
   @media (max-width: 460px) { .campos { grid-template-columns: 1fr; } }
   @media (min-width: 861px) and (max-width: 1000px) { .form-calc .campos { grid-template-columns: 1fr; } }
   .form-calc, .resultado { overflow: hidden; }
@@ -558,9 +562,14 @@
       var cobrado = precio * (1 + iva / 100);
       var desc = precio * (parseFloat($("iibb").value) || 0) / 100 + cobrado * (parseFloat($("comision").value) || 0) / 100;
       var neto = precio - costo - desc;
-      m.innerHTML = dolar > 0
-        ? "Tu margen: <b>" + ars(neto) + "</b> por mes (costo " + ars(costo) + (desc > 0 ? " + impuestos y comisión " + ars(desc) : "") + (precio > 0 ? ", " + Math.round(neto / precio * 100) + "%" : "") + ")" + (ri && iva > 0 ? "<br>El comercio paga " + ars(cobrado) + " con IVA (" + ars(cobrado - precio) + " de IVA, para ARCA)." : "")
-        : "Cargá el dólar arriba para ver tu margen";
+      if (!(dolar > 0)) { m.innerHTML = "Cargá el dólar arriba para ver tu margen"; return; }
+      var fila = function (txt, monto, clase) { return "<div class='fila " + (clase || "") + "'><span>" + txt + "</span><span>" + monto + "</span></div>"; };
+      m.innerHTML = "<p class='cuenta-tit'>Cuánto te queda por comercio, por mes</p>" +
+        (ri && iva > 0 ? fila("El comercio paga (con IVA)", ars(cobrado)) + fila("− IVA, para ARCA", ars(cobrado - precio), "resta") : "") +
+        fila(ri && iva > 0 ? "Tu precio sin IVA" : "Cobrás", ars(precio)) +
+        fila("− Servidor, Apple, emails y dominio", ars(costo), "resta") +
+        (desc > 0 ? fila("− Ingresos brutos y comisión de cobro", ars(desc), "resta") : "") +
+        fila("= Te queda", "<b>" + ars(neto) + "</b>" + (precio > 0 ? " <small>(" + Math.round(neto / precio * 100) + "%)</small>" : ""), "queda");
     });
     $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
   }
