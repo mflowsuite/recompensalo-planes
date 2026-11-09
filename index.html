@@ -560,16 +560,19 @@
       var precio = parseFloat($(m.dataset.plan).value) || 0, costo = dolar > 0 ? porCliente * dolar : 0;
       var ri = $("facturo").value === "ri", iva = ri ? (parseFloat($("iva").value) || 0) : 0;
       var cobrado = precio * (1 + iva / 100);
-      var desc = precio * (parseFloat($("iibb").value) || 0) / 100 + cobrado * (parseFloat($("comision").value) || 0) / 100;
+      var pIibb = parseFloat($("iibb").value) || 0, pCom = parseFloat($("comision").value) || 0;
+      var dIibb = precio * pIibb / 100, dCom = cobrado * pCom / 100, desc = dIibb + dCom;
+      var pc = function (n) { return n.toLocaleString("es-AR", { maximumFractionDigits: 2 }) + "%"; };
       var neto = precio - costo - desc;
       if (!(dolar > 0)) { m.innerHTML = "Cargá el dólar arriba para ver tu margen"; return; }
       var fila = function (txt, monto, clase) { return "<div class='fila " + (clase || "") + "'><span>" + txt + "</span><span>" + monto + "</span></div>"; };
       m.innerHTML = "<p class='cuenta-tit'>Cuánto te queda por comercio, por mes</p>" +
-        (ri && iva > 0 ? fila("El comercio paga (con IVA)", ars(cobrado)) + fila("− IVA, para ARCA", ars(cobrado - precio), "resta") : "") +
+        (ri && iva > 0 ? fila("El comercio paga (con IVA)", ars(cobrado)) + fila("− IVA para ARCA <small>(" + pc(iva) + " de tu precio)</small>", ars(cobrado - precio), "resta") : "") +
         fila(ri && iva > 0 ? "Tu precio sin IVA" : "Cobrás", ars(precio)) +
         fila("− Servidor, Apple, emails y dominio", ars(costo), "resta") +
-        (desc > 0 ? fila("− Ingresos brutos y comisión de cobro", ars(desc), "resta") : "") +
-        fila("= Te queda", "<b>" + ars(neto) + "</b>" + (precio > 0 ? " <small>(" + Math.round(neto / precio * 100) + "%)</small>" : ""), "queda");
+        (dIibb > 0 ? fila("− Ingresos brutos <small>(" + pc(pIibb) + " de tu precio" + (ri && iva > 0 ? " sin IVA" : "") + ")</small>", ars(dIibb), "resta") : "") +
+        (dCom > 0 ? fila("− Comisión de cobro <small>(" + pc(pCom) + " de lo que paga el comercio" + (ri && iva > 0 ? ", con IVA" : "") + ")</small>", ars(dCom), "resta") : "") +
+        fila("= Te queda" + (precio > 0 ? " <small>(" + Math.round(neto / precio * 100) + "% de tu precio" + (ri && iva > 0 ? " sin IVA" : "") + ")</small>" : ""), "<b>" + ars(neto) + "</b>", "queda");
     });
     $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
   }
