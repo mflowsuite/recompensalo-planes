@@ -650,7 +650,15 @@
     var abrir = b.getAttribute("aria-expanded") !== "true";
     cerrarGlobos(b);
     b.setAttribute("aria-expanded", String(abrir));
-    b.nextElementSibling.hidden = !abrir;
+    var g = b.nextElementSibling;
+    g.hidden = !abrir;
+    if (abrir) {
+      // Que no se corte: si se sale del recuadro (o de la pantalla), se corre hacia adentro.
+      g.style.left = "0px";
+      var caja = (b.closest(".panel") || document.body).getBoundingClientRect(), r = g.getBoundingClientRect();
+      var limite = Math.min(caja.right - 12, window.innerWidth - 12);
+      if (r.right > limite) g.style.left = Math.max(-(r.left - Math.max(caja.left + 12, 12)), limite - r.right) + "px";
+    }
   });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarGlobos(); });
 })();
