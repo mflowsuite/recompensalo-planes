@@ -256,6 +256,18 @@
               <option value="kvm8" data-precio="49.99" data-cap="30">KVM 8 · 8 núcleos, 32 GB</option>
             </select></div>
           </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="iva">IVA</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El IVA que tenés que pagar sobre lo que cobrás. Como monotributista no se cobra IVA: dejalo en 0. Si pasás a responsable inscripto, es 21.</span></div>
+            <div class="control"><input id="iva" class="pct" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="0"><span class="unidad">% del precio</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="iibb">Ingresos brutos</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>El porcentaje de ingresos brutos de tu provincia sobre lo que cobrás. Si estás en el monotributo unificado, ya va en la cuota: dejalo en 0.</span></div>
+            <div class="control"><input id="iibb" class="pct" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="0"><span class="unidad">% del precio</span></div>
+          </div>
+          <div class="campo">
+            <div class="cab-campo"><label for="comision">Comisión de cobro</label><button type="button" class="ayuda" aria-label="Qué es y cómo funciona" aria-expanded="false">?</button><span class="globo" role="note" hidden>Lo que te descuenta la plataforma con la que cobrás (por ejemplo, Mercado Pago), según el plazo en que querés la plata. Mirá el porcentaje en tu cuenta y cargalo con su IVA.</span></div>
+            <div class="control"><input id="comision" class="pct" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="0"><span class="unidad">% del precio</span></div>
+          </div>
           </div>
           <p class="servidores" id="recoTxt" aria-live="polite"></p>
         </fieldset>
@@ -315,7 +327,7 @@
             <tbody id="detalle"></tbody>
           </table>
         </div>
-        <p class="nota">Si cambiás un valor, se rehacen esta cuenta y el <b>margen del plan</b> en «Cómo venderlo», más abajo. No incluye tu tiempo, impuestos ni la comisión de cobro (están en «Lo que falta contar»).</p>
+        <p class="nota">Si cambiás un valor, se rehacen esta cuenta y el <b>margen del plan</b> en «Cómo venderlo», más abajo. Los impuestos y la comisión de cobro se descuentan del margen con los porcentajes de arriba. No incluye tu tiempo ni la cuota fija del monotributo (están en «Lo que falta contar»).</p>
       </div>
     </div>
   </section>
@@ -389,7 +401,7 @@
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>En el iPhone, la tarjeta aparece sola cerca del local</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Panel con la lista de clientes, su historial y ranking entre sucursales</span></li>
             <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Usuarios para el equipo, por sucursal</span></li>
-            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: <label class="precio-edit" for="p-extra"><span class="signo">$</span><input id="p-extra" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="25000" data-defecto="25000" aria-label="Precio por mes de cada sucursal extra"></label> por mes cada una</span></li>
+            <li class="mas"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sucursal extra: <label class="precio-edit" for="p-extra"><span class="signo">$</span><input id="p-extra" class="precio-in" type="number" inputmode="numeric" min="0" step="1000" value="30000" data-defecto="30000" aria-label="Precio por mes de cada sucursal extra"></label> por mes cada una</span></li>
         </ul>
       </article>
     </div>
@@ -537,8 +549,10 @@
     [1, 3, 10].forEach(function (n) { $("e-" + n).textContent = ars(unico + extra * (n - 1)) + " por mes"; });
     document.querySelectorAll(".margen").forEach(function (m) {
       var precio = parseFloat($(m.dataset.plan).value) || 0, costo = dolar > 0 ? porCliente * dolar : 0;
+      var pct = ["iva", "iibb", "comision"].reduce(function (s, id) { return s + (parseFloat($(id).value) || 0); }, 0);
+      var desc = precio * pct / 100, neto = precio - costo - desc;
       m.innerHTML = dolar > 0
-        ? "Tu margen: <b>" + ars(precio - costo) + "</b> por mes (costo " + ars(costo) + (precio > 0 ? ", " + Math.round((precio - costo) / precio * 100) + "%" : "") + ")"
+        ? "Tu margen: <b>" + ars(neto) + "</b> por mes (costo " + ars(costo) + (desc > 0 ? " + impuestos y comisión " + ars(desc) : "") + (precio > 0 ? ", " + Math.round(neto / precio * 100) + "%" : "") + ")"
         : "Cargá el dólar arriba para ver tu margen";
     });
     $("porClienteArs").textContent = dolar > 0 ? "≈ " + ars(porCliente * dolar) + " por mes, a dólar tarjeta" : "Cargá el dólar para verlo en pesos";
